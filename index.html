@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Max Schenk — Combat Systems Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Tokens ─────────────────────────────────────────────────── */
+    :root {
+      --bg:          #07080c;
+      --surface:     #0c0e16;
+      --surface-2:   #111420;
+      --border:      rgba(255,255,255,0.06);
+      --amber:       #d4890a;
+      --amber-bright:#f0a828;
+      --amber-dim:   rgba(212,137,10,0.08);
+      --amber-border:rgba(212,137,10,0.25);
+      --cyan:        #2eb8cc;
+      --cyan-dim:    rgba(46,184,204,0.08);
+      --tbh:         #c9773a;
+      --tbh-dim:     rgba(201,119,58,0.09);
+      --green:       #42c47a;
+      --green-dim:   rgba(66,196,122,0.09);
+      --text:        #adb1c4;
+      --text-bright: #d4d8e8;
+      --muted:       #535870;
+      --white:       #edf0f8;
+      --radius:      10px;
+      --max:         1100px;
+      --font-display:'Barlow Condensed', sans-serif;
+      --font-mono:   'JetBrains Mono', monospace;
+      --font-body:   'DM Sans', sans-serif;
+    }
+
+    /* ── Reset ──────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Graph-paper background texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    * { position: relative; z-index: 1; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Scroll Progress ────────────────────────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--amber), var(--amber-bright));
+      z-index: 999;
+      transition: width 0.1s linear;
+    }
+
+    /* ── Nav ────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(7,8,12,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+    }
+
+    .nav-brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .nav-brand span {
+      color: var(--amber);
+    }
+
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--amber); }
+
+    /* ── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 5rem;
+      overflow: hidden;
+    }
+
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.7;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      border: 1px solid var(--amber-border);
+      background: var(--amber-dim);
+      padding: 0.3rem 1rem;
+      border-radius: 3px;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--amber);
+      display: block;
+    }
+
+    .hero-sub {
+      font-family: var(--font-body);
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: var(--muted);
+      max-width: 520px;
+      margin: 1.8rem auto 2.8rem;
+      line-height: 1.75;
+    }
+
+    /* HUD-style stats bar */
+    .hero-stats {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--amber-border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 2.8rem;
+      background: rgba(7,8,12,0.6);
+    }
+
+    .stat-item {
+      padding: 0.7rem 1.8rem;
+      border-right: 1px solid var(--amber-border);
+      text-align: center;
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.6rem;
+      line-height: 1;
+      color: var(--amber-bright);
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Buttons ────────────────────────────────────────────────── */
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.7rem 1.6rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-amber {
+      background: var(--amber);
+      color: #07080c;
+    }
+    .btn-amber:hover {
+      background: var(--amber-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212,137,10,0.3);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-bright);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,0.2);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+    .btn-tbh {
+      background: var(--tbh);
+      color: #07080c;
+    }
+    .btn-tbh:hover {
+      opacity: 0.88;
+      transform: translateY(-2px);
+    }
+
+    /* ── Divider ────────────────────────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    /* ── Sections ───────────────────────────────────────────────── */
+    section {
+      padding: 6rem 2rem;
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    .section-header { margin-bottom: 3rem; }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--amber);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--white);
+      text-transform: uppercase;
+      line-height: 1.0;
+      letter-spacing: 0.02em;
+    }
+
+    .section-desc {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.75;
+    }
+
+    /* ── Fade-in animations ─────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-up:nth-child(2) { transition-delay: 0.08s; }
+    .fade-up:nth-child(3) { transition-delay: 0.16s; }
+    .fade-up:nth-child(4) { transition-delay: 0.24s; }
+
+    /* ── About ──────────────────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text p { color: var(--text); font-size: 0.97rem; line-height: 1.8; }
+    .about-text p + p { margin-top: 1rem; }
+
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.8rem;
+    }
+
+    .skill-chip {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      letter-spacing: 0.04em;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.28rem 0.8rem;
+      color: var(--text);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .skill-chip:hover { border-color: var(--amber-border); color: var(--amber); }
+
+    .info-stack { display: flex; flex-direction: column; gap: 1rem; }
+
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.6rem;
+      transition: border-color 0.2s;
+    }
+    .info-card:hover { border-color: var(--amber-border); }
+
+    .info-card-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.5rem;
+    }
+
+    .info-card p { font-size: 0.92rem; color: var(--text-bright); line-height: 1.65; }
+
+    /* ── Philosophy ─────────────────────────────────────────────── */
+    .philosophy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      margin-top: 2.5rem;
+    }
+
+    .philosophy-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.6rem;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .philosophy-card:hover {
+      border-color: var(--amber-border);
+      transform: translateY(-3px);
+    }
+
+    .phil-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+
+    .philosophy-card h4 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.35rem;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.7rem;
+    }
+
+    .philosophy-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Project header ─────────────────────────────────────────── */
+    .project-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .badge-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.22rem 0.8rem;
+      border-radius: 3px;
+    }
+
+    .badge-cyan { background: var(--cyan-dim); color: var(--cyan); border: 1px solid rgba(46,184,204,0.25); }
+    .badge-tbh-c { background: var(--tbh-dim); color: var(--tbh); border: 1px solid rgba(201,119,58,0.25); }
+    .badge-ship { background: var(--green-dim); color: var(--green); border: 1px solid rgba(66,196,122,0.25); }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      color: var(--white);
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: 0.01em;
+    }
+
+    .project-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      letter-spacing: 0.04em;
+    }
+
+    .meta-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
+
+    .meta-pill {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.03em;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.2rem 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ── Video ──────────────────────────────────────────────────── */
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .video-wrap iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+    }
+
+    /* ── Gallery ────────────────────────────────────────────────── */
+    .gallery-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+    .gallery-strip.g3 { grid-template-columns: repeat(3, 1fr); }
+    .gallery-strip.g4 { grid-template-columns: repeat(4, 1fr); }
+
+    .gallery-thumb {
+      border-radius: 7px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      aspect-ratio: 16/9;
+      transition: border-color 0.2s;
+    }
+    .gallery-thumb:hover { border-color: var(--amber-border); }
+    .gallery-thumb img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.35s ease, filter 0.35s ease;
+      filter: brightness(0.82) saturate(0.9);
+    }
+    .gallery-thumb:hover img { transform: scale(1.07); filter: brightness(1) saturate(1); }
+
+    /* ── Value Box ──────────────────────────────────────────────── */
+    .value-box {
+      background: var(--surface);
+      border: 1px solid rgba(66,196,122,0.2);
+      border-left: 3px solid var(--green);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.8rem;
+      margin: 2rem 0;
+    }
+
+    .value-box-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 0.65rem;
+    }
+
+    .value-box p { font-size: 0.95rem; color: var(--text-bright); line-height: 1.75; }
+
+    /* ── Decision Cards ─────────────────────────────────────────── */
+    .decisions-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 2.5rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .decisions-eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .decisions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .decision-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.4rem;
+      transition: border-color 0.22s, transform 0.22s;
+    }
+    .decision-card:hover {
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+    }
+
+    .dec-num {
+      font-family: var(--font-mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.5rem;
+    }
+    .dec-tbh .dec-num { color: var(--tbh); }
+
+    .dec-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+      margin-bottom: 0.7rem;
+    }
+
+    .dec-body { font-size: 0.855rem; color: var(--muted); line-height: 1.68; }
+
+    /* ── Systems Grid ───────────────────────────────────────────── */
+    .systems-label {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-bright);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.3rem;
+    }
+
+    .systems-sub {
+      font-size: 0.87rem;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+
+    .systems-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+
+    .system-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .system-card:hover { border-color: rgba(46,184,204,0.25); }
+
+    .sys-icon {
+      font-size: 1.2rem;
+      margin-bottom: 0.9rem;
+      display: block;
+    }
+
+    .system-card h4 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+    }
+
+    .system-card p { font-size: 0.86rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── TBH Layout ─────────────────────────────────────────────── */
+    .tbh-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .tbh-role-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.7rem;
+      margin-top: 1.5rem;
+    }
+
+    .tbh-role-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tbh);
+      margin-bottom: 0.9rem;
+    }
+
+    .tbh-role-block ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .tbh-role-block li { font-size: 0.9rem; color: var(--text); display: flex; gap: 0.7rem; line-height: 1.5; }
+    .tbh-role-block li::before { content: "▸"; color: var(--tbh); flex-shrink: 0; font-size: 0.7rem; margin-top: 0.25rem; }
+
+    .tbh-meta-strip {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      padding: 1rem 1.4rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+
+    .tbh-meta-item { font-size: 0.78rem; color: var(--muted); }
+    .tbh-meta-item span { color: var(--text-bright); font-weight: 500; font-family: var(--font-mono); display: block; font-size: 0.85rem; }
+
+    /* ── Team ───────────────────────────────────────────────────── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .team-member {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.7rem 1rem;
+    }
+    .team-member.highlight { border-color: rgba(201,119,58,0.4); background: var(--tbh-dim); }
+
+    .team-name { font-size: 0.88rem; color: var(--white); font-weight: 500; }
+    .team-role { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); margin-top: 0.1rem; }
+
+    /* ── Contact ────────────────────────────────────────────────── */
+    .contact-links { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2.5rem;
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      color: var(--white);
+      letter-spacing: 0.06em;
+    }
+    .footer-brand span { color: var(--amber); }
+
+    .footer-copy { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-top: 0.2rem; letter-spacing: 0.06em; }
+
+    .footer-links { display: flex; gap: 1.4rem; list-style: none; }
+    .footer-links a { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); transition: color 0.2s; letter-spacing: 0.04em; }
+    .footer-links a:hover { color: var(--amber); }
+
+    /* ── Lightbox ───────────────────────────────────────────────── */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(5,6,10,0.95); align-items: center; justify-content: center;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox-img { max-width: 92vw; max-height: 88vh; border-radius: 8px; }
+    #lightbox-close {
+      position: fixed; top: 1.5rem; right: 2rem;
+      font-size: 2.2rem; color: var(--amber); cursor: pointer; opacity: 0.7; transition: opacity 0.2s;
+    }
+    #lightbox-close:hover { opacity: 1; }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .philosophy-grid { grid-template-columns: 1fr; }
+      .decisions-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .tbh-layout { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    @media (max-width: 720px) {
+      .systems-grid { grid-template-columns: 1fr; }
+      .gallery-strip { grid-template-columns: repeat(3, 1fr); }
+      .gallery-strip.g4 { grid-template-columns: repeat(2, 1fr); }
+      nav .nav-links { gap: 1.2rem; }
+      .hero-stats { flex-direction: column; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--amber-border); }
+      .stat-item:last-child { border-bottom: none; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+
+  <!-- ── Nav ───────────────────────────────────────────────────── -->
+  <nav>
+    <span class="nav-brand">MAX <span>SCHENK</span></span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#tog">Threads of God</a></li>
+      <li><a href="#tbh">The Broken Hero</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ──────────────────────────────────────────────────── -->
+  <div class="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-inner">
+      <div class="hero-tag">Combat Systems Designer &nbsp;/&nbsp; UE5 + Unity</div>
+      <h1>MAX<em>SCHENK</em></h1>
+      <p class="hero-sub">
+        I design and build technical combat systems — boss encounters,
+        player-expressive mechanics, and modular data-driven architectures
+        that feel good because the rules underneath them are right.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">2</span>
+          <span class="stat-label">Shipped Projects</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">UE5</span>
+          <span class="stat-label">+ Unity</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">Solo</span>
+          <span class="stat-label">+ Team Production</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">5.0★</span>
+          <span class="stat-label">itch.io Rating</span>
+        </div>
+      </div>
+
+      <div class="hero-btns">
+        <a href="#tog" class="btn btn-amber">See My Work</a>
+        <a href="https://www.linkedin.com/in/max-schenk-gamedesign" target="_blank" class="btn btn-ghost">LinkedIn</a>
+        <a href="mailto:mbschenked@gmail.com" class="btn btn-ghost">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── About ─────────────────────────────────────────────────── -->
+  <section id="about">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Background</div>
+      <h2 class="section-title">About Me</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text fade-up">
+        <p>
+          I'm a combat systems designer focused on the intersection of mechanical
+          depth and player expression — building systems that reward mastery without
+          punishing newcomers, and boss encounters that stay surprising across
+          repeated runs.
+        </p>
+        <p>
+          My background in chemical engineering gives me a systems-thinking lens.
+          I approach combat the same way I'd approach a reaction network: isolate
+          the variables, define the feedback loops, iterate on parameters, and let
+          emergent complexity arise from well-defined rules.
+        </p>
+        <p>
+          I work primarily in Unreal Engine 5, using modular, data-driven architectures
+          that keep tuning fast and scope scalable. When a system needs it, I go to
+          code — Blueprint, C#, and C++ in UE.
+        </p>
+        <div class="skills-grid">
+          <span class="skill-chip">Unreal Engine 5</span>
+          <span class="skill-chip">Unity</span>
+          <span class="skill-chip">Combat Systems</span>
+          <span class="skill-chip">Behavior Trees</span>
+          <span class="skill-chip">Boss Encounter Design</span>
+          <span class="skill-chip">Combo Design</span>
+          <span class="skill-chip">Blueprint Scripting</span>
+          <span class="skill-chip">C#</span>
+          <span class="skill-chip">C++ (UE)</span>
+          <span class="skill-chip">Cinemachine</span>
+          <span class="skill-chip">Narrative Design</span>
+          <span class="skill-chip">Level Design</span>
+        </div>
+      </div>
+      <div class="info-stack fade-up">
+        <div class="info-card">
+          <div class="info-card-label">Education</div>
+          <p>Chemical Engineering — UC Davis<br/>Game Design — Vancouver Film School</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Focus Areas</div>
+          <p>Technical Combat Design &bull; Boss Encounter Systems<br/>Player-Expressive Mechanics &bull; Third-Person Action</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Contact</div>
+          <p>mbschenked@gmail.com<br/>linkedin.com/in/max-schenk-gamedesign</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ── Philosophy ─────────────────────────────────────────────── -->
+  <section id="philosophy">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Design Approach</div>
+      <h2 class="section-title">How I Work</h2>
+      <p class="section-desc">Three principles that show up in every project I ship.</p>
+    </div>
+    <div class="philosophy-grid">
+      <div class="philosophy-card fade-up">
+        <div class="phil-num">01 — Finish What You Start</div>
+        <h4>Completion Over Polish</h4>
+        <p>A shipped prototype with rough edges teaches more than an abandoned vision
+           board. I scope to finish, then iterate — every project here went from brief
+           to playable build.</p>
+      </div>
+      <div class="philosophy-card fade-up">
+        <div class="phil-num">02 — Systems Over Spectacle</div>
+        <h4>Depth Before Drama</h4>
+        <p>Great-feeling combat comes from the underlying rules — hitbox timing, stagger
+           weights, recovery windows — not particle effects. I build the feel into the
+           data before reaching for the visuals.</p>
+      </div>
+      <div class="philosophy-card fade-up">
+        <div class="phil-num">03 — Show the Process</div>
+        <h4>Decisions Over Deliverables</h4>
+        <p>Screenshots show what I built. Design decisions show how I think. Every project
+           below includes the reasoning behind the major calls — what I tried, what failed,
+           and what shipped.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- PROJECT 1 — THREADS OF GOD                                -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <section id="tog">
+
+    <div class="project-top fade-up">
+      <div>
+        <div class="badge-row">
+          <span class="badge badge-cyan">Personal Project — 2025</span>
+          <span class="badge badge-cyan">Solo Developer</span>
+          <span class="badge badge-ship">&#10003; Shipped</span>
+        </div>
+        <div class="project-title">Threads<br/>of God</div>
+        <div class="project-subtitle">// Combat Demo &nbsp;·&nbsp; Unreal Engine 5</div>
+        <p style="color:var(--muted);font-size:0.93rem;max-width:480px;margin-top:0.9rem;line-height:1.75;">
+          A third-person action combat demo built solo in UE5 — fast-paced precision
+          swordplay, fluid movement, and a modular data-driven architecture designed
+          to scale without rearchitecting.
+        </p>
+        <div class="meta-pills">
+          <span class="meta-pill">Unreal Engine 5</span>
+          <span class="meta-pill">Solo Developer</span>
+          <span class="meta-pill">Blueprint + C++</span>
+          <span class="meta-pill">Behavior Trees</span>
+          <span class="meta-pill">Boss Encounter Design</span>
+        </div>
+      </div>
+      <a href="https://www.youtube.com/watch?v=Cu8Jblk0IRo" target="_blank" class="btn btn-amber" style="flex-shrink:0;">&#9654;&nbsp; Watch Demo</a>
+    </div>
+
+    <!-- Video leads — combat in motion first -->
+    <div class="video-wrap fade-up" style="margin-bottom:1rem;">
+      <iframe
+        src="https://www.youtube.com/embed/Cu8Jblk0IRo"
+        title="Threads of God — Combat Demo"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <!-- Gallery -->
+    <div class="gallery-strip fade-up">
+      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="PortfolioPieces/ThreadsOfGod/Arelius Launch Attack.jpg" alt="Arelius launch attack" />
+      </div>
+      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="PortfolioPieces/ThreadsOfGod/HighresScreenshot00000.jpg" alt="White light trail attack" />
+      </div>
+      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="PortfolioPieces/ThreadsOfGod/AreliusCircleAttack1.jpg" alt="Circle AOE attack" />
+      </div>
+      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="PortfolioPieces/ThreadsOfGod/AreliusGroundSlash.jpg" alt="Ground slash barrier" />
+      </div>
+      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="PortfolioPieces/ThreadsOfGod/Arelius Pose Attack.jpg" alt="Combat at sunset" />
+      </div>
+    </div>
+    <div class="gallery-strip g3 fade-up" style="margin-bottom:0.5rem;">
+      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="PortfolioPieces/ThreadsOfGod/AreliusCircleAttack2.jpg" alt="Circle attack variant" />
+      </div>
+      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="PortfolioPieces/ThreadsOfGod/HighresScreenshot00001.jpg" alt="Overhead strike" />
+      </div>
+      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="PortfolioPieces/ThreadsOfGod/AreliusWindUpAttack.jpg" alt="Wind-up attack" />
+      </div>
+    </div>
+
+    <!-- Value Box -->
+    <div class="value-box fade-up">
+      <div class="value-box-label">// What This Demonstrates</div>
+      <p>
+        The ability to architect and ship a complete, data-driven combat system
+        independently — from concept through to a playable, tuned demo. Every system
+        here was designed and implemented solo: the enemy AI, combo logic, deflection
+        mechanic, and the locomotion rig. This is what I can deliver when given
+        full ownership.
+      </p>
+    </div>
+
+    <!-- Design Decisions -->
+    <div class="decisions-eyebrow fade-up">Design Decisions — The Reasoning Behind the Build</div>
+    <div class="decisions-grid fade-up">
+      <div class="decision-card">
+        <div class="dec-num">Decision 01</div>
+        <div class="dec-name">Data-Driven Architecture Over Hardcoded Values</div>
+        <div class="dec-body">
+          Boss encounter tuning requires hundreds of micro-adjustments. Early prototypes
+          had stat values baked into Blueprint nodes — recompiling for every tweak.
+          Moving hit reactions, stagger thresholds, and stamina gates to data assets cut
+          iteration time dramatically and made the system scalable to future enemies
+          without touching code.
+        </div>
+      </div>
+      <div class="decision-card">
+        <div class="dec-num">Decision 02</div>
+        <div class="dec-name">Weighted Behavior Trees Over Scripted Patterns</div>
+        <div class="dec-body">
+          Scripted boss patterns become predictable by the third attempt. I used weighted
+          action selection with per-action cooldown windows so each encounter draws from
+          the same move pool but distributes differently under pressure. Fights stay hard
+          because of player skill, not memorization.
+        </div>
+      </div>
+      <div class="decision-card">
+        <div class="dec-num">Decision 03</div>
+        <div class="dec-name">Frame-Precise Deflection with a Flash Cue</div>
+        <div class="dec-body">
+          Tight deflection windows reward skill, but pure timing gates frustrate new
+          players. I added a brief visual flash at the window start — skilled players
+          read animations and ignore it; the flash is a learning-curve safety net.
+          Tested across four playtests and removed frustration spikes without
+          diluting the skill ceiling.
+        </div>
+      </div>
+    </div>
+
+    <!-- Systems -->
+    <div class="systems-label fade-up">Core Systems</div>
+    <div class="systems-sub fade-up">Modular and data-driven for rapid iteration and scaling.</div>
+    <div class="systems-grid fade-up">
+      <div class="system-card">
+        <span class="sys-icon">⚡</span>
+        <h4>Combo System</h4>
+        <p>Chained light and heavy attack sequences with movement-adaptive inputs and
+           weapon-specific behaviour trees. Designed for expressive chaining without
+           sacrificing readability.</p>
+      </div>
+      <div class="system-card">
+        <span class="sys-icon">🛡</span>
+        <h4>Deflection System</h4>
+        <p>Frame-precise deflection windows trigger QTE-driven counter sequences and
+           finisher states. Rewards skilled play with spectacular visual payoff.</p>
+      </div>
+      <div class="system-card">
+        <span class="sys-icon">🔄</span>
+        <h4>Stat &amp; State System</h4>
+        <p>Data-driven attribute tables govern hit reactions, stagger thresholds, and
+           stamina gating — all exposed via data assets for tuning without recompiling.</p>
+      </div>
+      <div class="system-card">
+        <span class="sys-icon">🏃</span>
+        <h4>Locomotion System</h4>
+        <p>8-directional state machine driven by speed, angle, and weapon stance. Covers
+           guard strafe, aim locomotion, and multi-tier landings — blended with orientation
+           warping and procedural foot IK.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- PROJECT 2 — THE BROKEN HERO                               -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <section id="tbh">
+
+    <div class="project-top fade-up">
+      <div>
+        <div class="badge-row">
+          <span class="badge badge-tbh-c">VFS Team Project — 2025</span>
+          <span class="badge badge-tbh-c">6-Person Team</span>
+          <span class="badge badge-ship">&#10003; Shipped</span>
+        </div>
+        <div class="project-title" style="color:var(--tbh);">The<br/>Broken Hero</div>
+        <div class="project-subtitle">// Unity &nbsp;·&nbsp; Gameplay Programmer &nbsp;·&nbsp; 5.0★ on itch.io</div>
+        <p style="color:var(--muted);font-size:0.93rem;max-width:520px;margin-top:0.9rem;line-height:1.75;">
+          A single-player 3D fixed-camera platformer — a Greek soldier reborn from an
+          ancient fresco, navigating a collapsing temple while switching between the
+          physical 3D world and 2D fresco spaces that transform the player into
+          an illustration.
+        </p>
+        <div class="meta-pills">
+          <span class="meta-pill">Unity</span>
+          <span class="meta-pill">C#</span>
+          <span class="meta-pill">6-Person Team</span>
+          <span class="meta-pill">Cinemachine</span>
+          <span class="meta-pill">Gameplay Programmer</span>
+        </div>
+      </div>
+      <a href="https://vfs-gdpg.itch.io/the-broken-hero" target="_blank" class="btn btn-tbh" style="flex-shrink:0;">Play on itch.io</a>
+    </div>
+
+    <div class="tbh-layout fade-up">
+
+      <!-- Left — video + screenshots -->
+      <div>
+        <div style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);">
+          <div style="position:relative;width:100%;aspect-ratio:16/9;">
+            <iframe
+              src="https://www.youtube.com/embed/flLRO251moE?start=1"
+              title="The Broken Hero — Gameplay Trailer"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              style="position:absolute;inset:0;width:100%;height:100%;border:0;">
+            </iframe>
+          </div>
+          <div class="tbh-meta-strip">
+            <div class="tbh-meta-item">Platform<span>Windows</span></div>
+            <div class="tbh-meta-item">Status<span>Released</span></div>
+            <div class="tbh-meta-item">Rating<span>5.0 / 5 ★</span></div>
+            <div class="tbh-meta-item">Engine<span>Unity</span></div>
+          </div>
+        </div>
+
+        <div class="gallery-strip g4" style="margin-top:0.7rem;margin-bottom:0;">
+          <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+            <img src="PortfolioPieces/The Broken Hero/Screenshot 2026-04-15 152759.png" alt="TBH scene 1" />
+          </div>
+          <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+            <img src="PortfolioPieces/The Broken Hero/Screenshot 2026-04-15 152830.png" alt="TBH scene 2" />
+          </div>
+          <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+            <img src="PortfolioPieces/The Broken Hero/Screenshot 2026-04-15 152855.png" alt="TBH scene 3" />
+          </div>
+          <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+            <img src="PortfolioPieces/The Broken Hero/Screenshot 2026-04-15 152916.png" alt="TBH scene 4" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Right — description + value box + role -->
+      <div>
+        <p style="color:var(--text);font-size:0.96rem;line-height:1.8;">
+          Players traverse upward through a collapsing temple, hunted by a mythic
+          Minotaur. Entering fresco artworks shifts gameplay from 3D exploration to
+          side-scrolling 2D platforming — a dual-world mechanic that transforms both
+          the visual language and the rules of movement.
+        </p>
+
+        <div class="value-box" style="margin-top:1.5rem;border-color:rgba(201,119,58,0.25);border-left-color:var(--tbh);">
+          <div class="value-box-label" style="color:var(--tbh);">// What This Demonstrates</div>
+          <p>
+            Ability to implement complex systems in a cross-discipline team under a
+            fixed production schedule — six milestones, six people, shipped on time
+            with a 5.0 rating. Specifically: building a state-driven camera architecture
+            that non-coders could control, and using camera direction as a pacing tool
+            for cinematic feel without any UI.
+          </p>
+        </div>
+
+        <div class="tbh-role-block">
+          <div class="tbh-role-label">My Role — Gameplay Programmer</div>
+          <ul>
+            <li>Core gameplay systems and player character mechanics in Unity / C#</li>
+            <li>3D ↔ 2D world-switching logic with visual continuity across the transition</li>
+            <li>State-driven Cinemachine architecture: CameraManager, CinemachineSwitcher</li>
+            <li>Runtime camera blending designers could control without code changes</li>
+            <li>Setpiece camera composition for major cinematic moments</li>
+            <li>Collaborated across Level Design, Art, and Sound disciplines</li>
+          </ul>
+        </div>
+
+        <div style="margin-top:1.5rem;">
+          <div class="info-card-label" style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:0.8rem;">Development Team</div>
+          <div class="team-grid">
+            <div class="team-member highlight">
+              <div class="team-name">Max Schenk</div>
+              <div class="team-role">Gameplay Programmer</div>
+            </div>
+            <div class="team-member">
+              <div class="team-name">Rafael Cenato</div>
+              <div class="team-role">PM · Programmer</div>
+            </div>
+            <div class="team-member">
+              <div class="team-name">Gustavo Duarte</div>
+              <div class="team-role">Programmer · Lighting</div>
+            </div>
+            <div class="team-member">
+              <div class="team-name">Lais Fujiyama</div>
+              <div class="team-role">Level Design · UI Art</div>
+            </div>
+            <div class="team-member">
+              <div class="team-name">Luigi Patti</div>
+              <div class="team-role">Character · Level Art</div>
+            </div>
+            <div class="team-member">
+              <div class="team-name">Luiza Arantes</div>
+              <div class="team-role">Environment · VFX · Tech Art</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Design Decisions — full width below -->
+    <div class="decisions-eyebrow dec-tbh fade-up" style="margin-top:3rem;color:var(--tbh);">Design Decisions — The Reasoning Behind the Build</div>
+    <div class="decisions-grid fade-up">
+      <div class="decision-card dec-tbh">
+        <div class="dec-num" style="color:var(--tbh);">Decision 01</div>
+        <div class="dec-name">State-Driven Camera Architecture</div>
+        <div class="dec-body">
+          Early builds used hardcoded camera positions per scene. This broke every time
+          level layout changed between milestones. I built CameraManager with a Cinemachine
+          state machine so the level designer could trigger camera transitions through scene
+          events — no code changes needed. This unblocked non-coders during M2 and M3 crunch.
+        </div>
+      </div>
+      <div class="decision-card dec-tbh">
+        <div class="dec-num" style="color:var(--tbh);">Decision 02</div>
+        <div class="dec-name">World-Switch as a Physical Metaphor</div>
+        <div class="dec-body">
+          The fresco theme demanded the 3D→2D shift feel like entering a painting, not
+          loading a level. I prioritized visual continuity — flattening depth, adjusting the
+          player controller, shifting the camera plane — so the mechanic reads as the world
+          transforming, not the game changing mode.
+        </div>
+      </div>
+      <div class="decision-card dec-tbh">
+        <div class="dec-num" style="color:var(--tbh);">Decision 03</div>
+        <div class="dec-name">Camera-Led Setpiece Pacing</div>
+        <div class="dec-body">
+          In a short game, pacing is everything. I used camera direction — not UI or
+          tutorial text — to guide players through major moments: wide pulls for reveals,
+          tight frames for tension, slow pans for payoff. The approach kept the experience
+          cinematic and author-driven without adding any onscreen clutter.
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ── Contact ────────────────────────────────────────────────── -->
+  <section id="contact">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Get In Touch</div>
+      <h2 class="section-title">Contact</h2>
+      <p class="section-desc">Open to combat design roles, collaborations, and feedback on my work.</p>
+    </div>
+    <div class="contact-links fade-up">
+      <a href="mailto:mbschenked@gmail.com" class="btn btn-amber">mbschenked@gmail.com</a>
+      <a href="https://www.linkedin.com/in/max-schenk-gamedesign" target="_blank" class="btn btn-ghost">LinkedIn</a>
+      <a href="https://vfs-gdpg.itch.io/the-broken-hero" target="_blank" class="btn btn-ghost">itch.io</a>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────────── -->
+  <footer>
+    <div>
+      <div class="footer-brand">MAX <span>SCHENK</span></div>
+      <div class="footer-copy">Combat Systems Designer &nbsp;·&nbsp; 2026</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#tog">Threads of God</a></li>
+      <li><a href="#tbh">The Broken Hero</a></li>
+      <li><a href="https://vfs-gdpg.itch.io/the-broken-hero" target="_blank">itch.io</a></li>
+      <li><a href="https://www.linkedin.com/in/max-schenk-gamedesign" target="_blank">LinkedIn</a></li>
+    </ul>
+  </footer>
+
+  <!-- ── Lightbox ───────────────────────────────────────────────── -->
+  <div id="lightbox">
+    <span id="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <!-- ── Scripts ───────────────────────────────────────────────── -->
+  <script>
+    /* ── Scroll Progress Bar ── */
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (scrolled / total * 100) + '%';
+    });
+
+    /* ── Hero Canvas: Ambient System Graph ── */
+    const canvas = document.getElementById('hero-canvas');
+    const ctx    = canvas.getContext('2d');
+    let nodes = [];
+    let raf;
+
+    function resizeCanvas() {
+      canvas.width  = canvas.parentElement.offsetWidth;
+      canvas.height = canvas.parentElement.offsetHeight;
+    }
+
+    function initNodes() {
+      const count = Math.floor((canvas.width * canvas.height) / 14000);
+      nodes = Array.from({ length: Math.min(count, 80) }, () => ({
+        x:  Math.random() * canvas.width,
+        y:  Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.28,
+        r:  Math.random() * 1.5 + 0.8
+      }));
+    }
+
+    function drawFrame() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const len = nodes.length;
+
+      for (let i = 0; i < len; i++) {
+        for (let j = i + 1; j < len; j++) {
+          const dx   = nodes[i].x - nodes[j].x;
+          const dy   = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(212,137,10,${0.18 * (1 - dist / 130)})`;
+            ctx.lineWidth   = 0.6;
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      for (const n of nodes) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(212,137,10,0.5)';
+        ctx.fill();
+
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < 0 || n.x > canvas.width)  n.vx *= -1;
+        if (n.y < 0 || n.y > canvas.height)  n.vy *= -1;
+      }
+
+      raf = requestAnimationFrame(drawFrame);
+    }
+
+    function initCanvas() {
+      resizeCanvas();
+      initNodes();
+      if (raf) cancelAnimationFrame(raf);
+      drawFrame();
+    }
+
+    initCanvas();
+    window.addEventListener('resize', initCanvas);
+
+    /* Pause animation when hero not visible for perf */
+    const heroObserver = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        if (!raf) drawFrame();
+      } else {
+        cancelAnimationFrame(raf);
+        raf = null;
+      }
+    });
+    heroObserver.observe(document.querySelector('.hero'));
+
+    /* ── Scroll Fade-In ── */
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    fadeEls.forEach(el => fadeObserver.observe(el));
+
+    /* ── Lightbox ── */
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
+
+</body>
+</html>
