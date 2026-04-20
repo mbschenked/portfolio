@@ -873,7 +873,91 @@
       border-radius: 3px;
       padding: 0.18rem 0.65rem;
       color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
+    .ai-tag:hover {
+      background: rgba(46,184,204,0.14);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    /* ── Equation Block ─────────────────────────────────────────── */
+    .eq-block {
+      background: rgba(46,184,204,0.04);
+      border: 1px solid rgba(46,184,204,0.14);
+      border-radius: var(--radius);
+      padding: 1.6rem 2rem;
+      margin: 1.4rem 0;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+    }
+    .eq-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 1.1rem;
+    }
+    .eq-label + .eq-label { margin-top: 1rem; }
+    .eq-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.7rem 0;
+      flex-wrap: wrap;
+    }
+    .eq-fraction {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      vertical-align: middle;
+      margin: 0 0.3rem;
+    }
+    .eq-num {
+      border-bottom: 1px solid var(--cyan);
+      padding: 0 0.3rem 0.25rem;
+      text-align: center;
+      color: var(--white);
+    }
+    .eq-den {
+      padding: 0.25rem 0.3rem 0;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .eq-sigma {
+      font-size: 1.5rem;
+      color: var(--cyan);
+      line-height: 1;
+    }
+    .eq-bounds {
+      display: inline-flex;
+      flex-direction: column;
+      font-size: 0.6rem;
+      line-height: 1.2;
+      color: var(--muted);
+      margin-right: 0.1rem;
+    }
+    .eq-bounds sup { align-self: flex-end; }
+    .eq-sep {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 1rem 0;
+    }
+    .eq-op { color: var(--cyan); margin: 0 0.2rem; }
+    .eq-lhs { color: var(--white); }
+    .eq-legend {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-top: 0.2rem;
+    }
+    .eq-legend em { color: var(--text); font-style: italic; }
 
     /* ── Decision CTA & Modal ───────────────────────────────────── */
     .decision-card { display: flex; flex-direction: column; }
@@ -1176,7 +1260,6 @@
         <div class="badge-row">
           <span class="badge badge-cyan">Personal Project — 2025</span>
           <span class="badge badge-cyan">Solo Developer</span>
-          <span class="badge badge-ship">&#10003; Shipped</span>
         </div>
         <div class="project-title">Threads<br/>of God</div>
         <div class="project-subtitle">// Combat Demo &nbsp;·&nbsp; Unreal Engine 5</div>
@@ -1242,7 +1325,7 @@
       <div class="value-box-label">// What This Demonstrates</div>
       <p>
         A complete combat system designed and built solo — player side, enemy AI, and
-        the architecture underneath both. The boss runs 70+ discrete named attacks
+        the architecture underneath both. The boss runs 100+ discrete named attacks
         across phase-gated behavior trees with velocity-aware selection, a separate
         reactive defensive tree, and a bespoke decorator and task library. This is
         the depth I build independently when given full ownership.
@@ -1309,7 +1392,7 @@
 
     <div class="ai-stats-row fade-up">
       <div class="ai-stat">
-        <span class="ai-stat-num">70+</span>
+        <span class="ai-stat-num">100+</span>
         <span class="ai-stat-label">Named Attacks</span>
       </div>
       <div class="ai-stat">
@@ -1345,30 +1428,44 @@
       <div class="ai-tag-group">
         <div class="ai-tag-title">Custom Decorators</div>
         <div class="ai-tag-list">
-          <span class="ai-tag">BTD_CheckPhase</span>
-          <span class="ai-tag">BTD_InRange</span>
-          <span class="ai-tag">BTD_InIdealRange</span>
-          <span class="ai-tag">BTD_PlayerVelocityWithinDesiredValues</span>
-          <span class="ai-tag">BTD_FollowUpChance</span>
-          <span class="ai-tag">BTD_CheckAttackParameters</span>
-          <span class="ai-tag">BTD_CheckIfAttackTargetNull</span>
-          <span class="ai-tag">BTD_IsWeaponEquipped</span>
+          <button class="ai-tag" onclick="openAIDoc('BTD_CheckPhase')">BTD_CheckPhase</button>
+          <button class="ai-tag" onclick="openAIDoc('BTD_InRange')">BTD_InRange</button>
+          <button class="ai-tag" onclick="openAIDoc('BTD_InIdealRange')">BTD_InIdealRange</button>
+          <button class="ai-tag" onclick="openAIDoc('BTD_PlayerVelocityWithinDesiredValues')">BTD_PlayerVelocityWithinDesiredValues</button>
+          <button class="ai-tag" onclick="openAIDoc('BTD_FollowUpChance')">BTD_FollowUpChance</button>
+          <button class="ai-tag" onclick="openAIDoc('BTD_CheckAttackParameters')">BTD_CheckAttackParameters</button>
+          <button class="ai-tag" onclick="openAIDoc('BTD_CheckIfAttackTargetNull')">BTD_CheckIfAttackTargetNull</button>
+          <button class="ai-tag" onclick="openAIDoc('BTD_IsWeaponEquipped')">BTD_IsWeaponEquipped</button>
         </div>
       </div>
       <div class="ai-tag-group">
         <div class="ai-tag-title">Custom Tasks</div>
         <div class="ai-tag-list">
-          <span class="ai-tag">BTT_Attacks</span>
-          <span class="ai-tag">BTT_Dash</span>
-          <span class="ai-tag">BTT_Strafe</span>
-          <span class="ai-tag">BTT_MoveToTarget</span>
-          <span class="ai-tag">BTT_SetMovementMode</span>
-          <span class="ai-tag">BTT_EquipWeapon</span>
-          <span class="ai-tag">BTT_UnequipWeapon</span>
-          <span class="ai-tag">BTT_FocusTarget</span>
-          <span class="ai-tag">BTT_HitReaction</span>
+          <button class="ai-tag" onclick="openAIDoc('BTT_Attacks')">BTT_Attacks</button>
+          <button class="ai-tag" onclick="openAIDoc('BTT_Dash')">BTT_Dash</button>
+          <button class="ai-tag" onclick="openAIDoc('BTT_Strafe')">BTT_Strafe</button>
+          <button class="ai-tag" onclick="openAIDoc('BTT_MoveToTarget')">BTT_MoveToTarget</button>
+          <button class="ai-tag" onclick="openAIDoc('BTT_SetMovementMode')">BTT_SetMovementMode</button>
+          <button class="ai-tag" onclick="openAIDoc('BTT_EquipWeapon')">BTT_EquipWeapon</button>
+          <button class="ai-tag" onclick="openAIDoc('BTT_UnequipWeapon')">BTT_UnequipWeapon</button>
+          <button class="ai-tag" onclick="openAIDoc('BTT_FocusTarget')">BTT_FocusTarget</button>
+          <button class="ai-tag" onclick="openAIDoc('BTT_HitReaction')">BTT_HitReaction</button>
         </div>
       </div>
+    </div>
+
+    <div class="bt-tree fade-up" style="margin-top:1.2rem;">
+      <div class="bt-label">// Dynamic Runtime Behavior</div>
+      <p style="margin:0 0 1rem; font-size:0.88rem; line-height:1.7; color:var(--text);">
+        Each attack carries per-action weighted probabilities stored in a custom
+        data struct (<em>F_DiscreetActionWeightedChances</em>) and queried live at
+        every BT decision point. Two dedicated decorators —
+        <em>BTD_AttackSequenceChance</em> and <em>BTD_FollowUpChance</em> — roll
+        against these weights before committing to any chain or follow-up. The boss
+        resists memorization without feeling random: unpredictability is structured,
+        not noise.
+      </p>
+      <button class="dec-cta" onclick="openDecisionModal('modal-dyn-runtime')">Deep Dive <span class="dec-cta-arrow">→</span></button>
     </div>
 
   </section>
@@ -1820,7 +1917,123 @@
         if (e.target === this) closeDecisionModal(this.id);
       });
     });
+
+    /* ── AI Doc Modal ── */
+    const aiDocs = {
+      // Documentation placeholder — fill in per entry as needed
+      // 'BTD_CheckPhase': { eyebrow: 'Decorator', body: '...' },
+    };
+
+    function openAIDoc(name) {
+      const doc = aiDocs[name] || null;
+      document.getElementById('ai-doc-eyebrow').textContent = doc ? doc.eyebrow : 'Decorator / Task';
+      document.getElementById('ai-doc-title').textContent = name;
+      document.getElementById('ai-doc-body').innerHTML = doc
+        ? doc.body
+        : '<p style="color:var(--muted);font-family:var(--font-mono);font-size:0.8rem;">// Documentation coming soon</p>';
+      document.getElementById('modal-ai-doc').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeAIDoc() {
+      document.getElementById('modal-ai-doc').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('modal-ai-doc').addEventListener('click', function(e) {
+      if (e.target === this) closeAIDoc();
+    });
   </script>
+
+  <!-- ── Dynamic Runtime Behavior Modal ──────────────────────────── -->
+  <div id="modal-dyn-runtime" class="decision-overlay">
+    <div class="decision-modal">
+      <button class="dm-close" onclick="closeDecisionModal('modal-dyn-runtime')">&times;</button>
+      <div class="dm-eyebrow">Boss AI Architecture — BPC_Attacks_TOG</div>
+      <div class="dm-title">Dynamic Runtime<br/>Behavior</div>
+
+      <p>Attacks and combos are organized into branches within the combat tree.
+         Every time an attack doesn't fire, it accumulates points — pressure building
+         toward inevitability. Selection chance is its current points divided by the
+         branch total: a live probability distribution that shifts across the entire
+         fight based on what actually works against <em>this</em> player.</p>
+
+      <div class="eq-block">
+        <div class="eq-label">// Selection Probability</div>
+        <div class="eq-row">
+          <span class="eq-lhs"><em>P</em>(<em>i</em>)</span>
+          <span class="eq-op">=</span>
+          <span class="eq-fraction">
+            <span class="eq-num"><em>P<sub>i</sub></em></span>
+            <span class="eq-den">
+              <span class="eq-sigma">Σ</span>
+              <span class="eq-bounds"><sup><em>n</em></sup><sub><em>j</em>=1</sub></span>
+              <em>P<sub>j</sub></em>
+            </span>
+          </span>
+        </div>
+
+        <div class="eq-sep"></div>
+        <div class="eq-label">// Point Accumulation (attack <em>i</em> not selected at decision)</div>
+        <div class="eq-row">
+          <em>P<sub>i</sub></em>
+          <span class="eq-op">←</span>
+          <em>P<sub>i</sub></em> + 1 · <em>m<sub>i</sub></em> · <em>w</em>(<em>H<sub>i</sub></em>)
+        </div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:0.3rem;">base = 1 &nbsp;·&nbsp; <em>m<sub>i</sub></em> ∈ [0.7, 1.3] &nbsp;·&nbsp; P<sub>i</sub>(init) = 0</div>
+
+        <div class="eq-sep"></div>
+        <div class="eq-label">// On Successful Hit</div>
+        <div class="eq-row"><em>m<sub>i</sub></em> <span class="eq-op">←</span> clamp(<em>m<sub>i</sub></em> + Δ<em>m</em>,&nbsp; 0.7,&nbsp; 1.3)</div>
+        <div class="eq-row"><em>P<sub>i</sub></em> <span class="eq-op">←</span> 0</div>
+
+        <div class="eq-sep"></div>
+        <div class="eq-label">// On Miss or Block</div>
+        <div class="eq-row"><em>m<sub>i</sub></em> <span class="eq-op">←</span> clamp(<em>m<sub>i</sub></em> − Δ<em>m</em>,&nbsp; 0.7,&nbsp; 1.3)</div>
+
+        <div class="eq-sep"></div>
+        <div class="eq-label">// On Perfect Parry</div>
+        <div class="eq-row"><em>m<sub>i</sub></em> <span class="eq-op">unchanged</span></div>
+      </div>
+
+      <div class="eq-legend">
+        <div><em>P<sub>i</sub></em> — accumulated points for attack <em>i</em>; initialized at 0, updated only on attack result</div>
+        <div><em>n</em> — total attacks in the branch</div>
+        <div><em>m<sub>i</sub></em> — effectiveness modifier; clamped to [0.7, 1.3]; rises on hit, falls on miss/block, untouched on perfect parry</div>
+        <div><em>w(H<sub>i</sub>)</em> — hit weight; scales points added based on whether the attack would connect</div>
+        <div><em>P<sub>i</sub></em> ← 0 — reset on successful hit; enforces cooldown before the attack can re-accumulate</div>
+      </div>
+
+      <p style="margin-top:1.4rem;">Points only move when an attack result is evaluated — not on a timer.
+         A perfect parry leaves the modifier untouched: the player executed at the
+         highest level, and the system doesn't penalize the boss for it. Blocks and
+         misses pull the modifier down, so attacks that aren't connecting accumulate
+         slower and naturally fall back in the distribution.</p>
+
+      <p>The system only runs on the combat tree. Narrative attacks — phase openers
+         and crescendo moments that define the fight's emotional arc — are hard-coded
+         to fire reliably. The defensive tree carries no point system at all: those
+         exchanges need to feel like the player is barely surviving, and a weighted
+         distribution would undercut that pressure.</p>
+
+      <p>Where the system has the most impact is on ranged attacks and gap-closers.
+         As the distribution shifts, the fight's rhythm changes — trading close-quarters
+         pressure for a cat-and-mouse dynamic of weaving through ranged attacks to find
+         an opening on an unguarded enemy. The same boss, a different fight.</p>
+
+      <p style="color:var(--muted); font-family:var(--font-mono); font-size:0.72rem; margin-top:1.6rem; padding-top:1.2rem; border-top:1px solid var(--border);">
+        // System architected in BPC_Attacks_TOG — full implementation
+        scoped for a future build.</p>
+    </div>
+  </div>
+
+  <!-- ── AI Doc Modal ─────────────────────────────────────────────── -->
+  <div id="modal-ai-doc" class="decision-overlay">
+    <div class="decision-modal">
+      <button class="dm-close" onclick="closeAIDoc()">&times;</button>
+      <div class="dm-eyebrow" id="ai-doc-eyebrow">Decorator / Task</div>
+      <div class="dm-title" id="ai-doc-title"></div>
+      <div id="ai-doc-body"></div>
+    </div>
+  </div>
 
 </body>
 </html>
