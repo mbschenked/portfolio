@@ -784,6 +784,223 @@
     #lightbox-prev { left: 1.5rem; }
     #lightbox-next { right: 1.5rem; }
 
+    /* ── Boss AI Architecture ───────────────────────────────────── */
+    .ai-stats-row {
+      display: flex;
+      gap: 0;
+      border: 1px solid rgba(46,184,204,0.2);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 0 0 1.5rem;
+      background: var(--surface);
+    }
+    .ai-stat {
+      padding: 0.9rem 1.4rem;
+      border-right: 1px solid var(--border);
+      text-align: center;
+      flex: 1;
+    }
+    .ai-stat:last-child { border-right: none; }
+    .ai-stat-num {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.8rem;
+      line-height: 1;
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .ai-stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .bt-tree {
+      background: var(--surface);
+      border: 1px solid rgba(46,184,204,0.15);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 1.2rem;
+    }
+    .bt-label {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 1.2rem;
+    }
+    .bt-row {
+      display: flex;
+      align-items: baseline;
+      line-height: 2;
+    }
+    .bt-indent  { margin-left: 1.6rem; }
+    .bt-indent-2 { margin-left: 3.2rem; }
+    .bt-node { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-bright); }
+    .bt-key { color: var(--cyan); }
+    .bt-comment { color: var(--muted); font-size: 0.75rem; }
+    .bt-connector { color: var(--muted); margin-right: 0.5rem; font-family: var(--font-mono); font-size: 0.8rem; }
+
+    .ai-tags {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .ai-tag-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+    }
+    .ai-tag-title {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.8rem;
+    }
+    .ai-tag-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .ai-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      background: rgba(46,184,204,0.05);
+      border: 1px solid rgba(46,184,204,0.18);
+      border-radius: 3px;
+      padding: 0.18rem 0.65rem;
+      color: var(--text);
+    }
+
+    /* ── Decision CTA & Modal ───────────────────────────────────── */
+    .decision-card { display: flex; flex-direction: column; }
+
+    .decision-brief {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
+      flex: 1;
+    }
+
+    .dec-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.69rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: none;
+      border: 1px solid rgba(46,184,204,0.25);
+      border-radius: 3px;
+      padding: 0.38rem 0.9rem;
+      cursor: pointer;
+      transition: background 0.18s, border-color 0.18s, color 0.18s;
+      margin-top: auto;
+      align-self: flex-start;
+    }
+    .dec-cta:hover {
+      background: rgba(46,184,204,0.07);
+      border-color: var(--cyan);
+      color: var(--white);
+    }
+    .dec-cta-arrow { transition: transform 0.18s; display: inline-block; }
+    .dec-cta:hover .dec-cta-arrow { transform: translateX(4px); }
+
+    .decision-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 998;
+      background: rgba(5,6,10,0.96);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .decision-overlay.open { display: flex; }
+
+    .decision-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--cyan);
+      border-radius: var(--radius);
+      max-width: 780px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 2.6rem 3rem;
+      position: relative;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .dm-close {
+      position: absolute;
+      top: 1.4rem; right: 1.8rem;
+      font-size: 1.7rem;
+      color: var(--muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      transition: color 0.18s;
+      line-height: 1;
+    }
+    .dm-close:hover { color: var(--cyan); }
+
+    .dm-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.45rem;
+    }
+    .dm-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.5rem, 3vw, 2.3rem);
+      color: var(--white);
+      text-transform: uppercase;
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+      margin-bottom: 2rem;
+      padding-bottom: 1.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dm-section {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .dm-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+    .dm-section-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.45rem;
+    }
+    .dm-section h4 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.8rem;
+    }
+    .dm-section p { font-size: 0.92rem; color: var(--text); line-height: 1.82; }
+    .dm-section p + p { margin-top: 0.85rem; }
+    .dm-code { font-family: var(--font-mono); font-size: 0.83em; color: var(--cyan); }
+
     /* ── Responsive ─────────────────────────────────────────────── */
     @media (max-width: 900px) {
       .philosophy-grid { grid-template-columns: 1fr; }
@@ -964,9 +1181,10 @@
         <div class="project-title">Threads<br/>of God</div>
         <div class="project-subtitle">// Combat Demo &nbsp;·&nbsp; Unreal Engine 5</div>
         <p style="color:var(--muted);font-size:0.93rem;max-width:480px;margin-top:0.9rem;line-height:1.75;">
-          A third-person action combat demo built solo in UE5 — fast-paced precision
-          swordplay, fluid movement, and a modular data-driven architecture designed
-          to scale without rearchitecting.
+          A solo-built third-person combat demo in UE5. Every boss attack is a layered
+          puzzle — forcing position, timing, and mechanic choice simultaneously to
+          create an opening the player has to earn. Built from scratch: player combat,
+          enemy AI, locomotion, and the architecture underneath all of it.
         </p>
         <div class="meta-pills">
           <span class="meta-pill">Unreal Engine 5</span>
@@ -1023,11 +1241,11 @@
     <div class="value-box fade-up">
       <div class="value-box-label">// What This Demonstrates</div>
       <p>
-        The ability to architect and ship a complete, data-driven combat system
-        independently — from concept through to a playable, tuned demo. Every system
-        here was designed and implemented solo: the enemy AI, combo logic, deflection
-        mechanic, and the locomotion rig. This is what I can deliver when given
-        full ownership.
+        A complete combat system designed and built solo — player side, enemy AI, and
+        the architecture underneath both. The boss runs 70+ discrete named attacks
+        across phase-gated behavior trees with velocity-aware selection, a separate
+        reactive defensive tree, and a bespoke decorator and task library. This is
+        the depth I build independently when given full ownership.
       </p>
     </div>
 
@@ -1036,35 +1254,21 @@
     <div class="decisions-grid fade-up">
       <div class="decision-card">
         <div class="dec-num">Decision 01</div>
-        <div class="dec-name">Data-Driven Architecture Over Hardcoded Values</div>
-        <div class="dec-body">
-          Boss encounter tuning requires hundreds of micro-adjustments. Early prototypes
-          had stat values baked into Blueprint nodes — recompiling for every tweak.
-          Moving hit reactions, stagger thresholds, and stamina gates to data assets cut
-          iteration time dramatically and made the system scalable to future enemies
-          without touching code.
-        </div>
+        <div class="dec-name">Per-Attack Data Structs Over Baked Blueprint Logic</div>
+        <p class="decision-brief">Each boss attack bundles its animation, movement curves, starting position, and play-rate scaling into one data struct. Tuning became a single field change; adding a new attack meant filling out a struct, not touching logic.</p>
+        <button class="dec-cta" onclick="openDecisionModal('modal-d01')">Design Analysis <span class="dec-cta-arrow">→</span></button>
       </div>
       <div class="decision-card">
         <div class="dec-num">Decision 02</div>
-        <div class="dec-name">Weighted Behavior Trees Over Scripted Patterns</div>
-        <div class="dec-body">
-          Scripted boss patterns become predictable by the third attempt. I used weighted
-          action selection with per-action cooldown windows so each encounter draws from
-          the same move pool but distributes differently under pressure. Fights stay hard
-          because of player skill, not memorization.
-        </div>
+        <div class="dec-name">Two Parallel Trees: Reactive and Probabilistic</div>
+        <p class="decision-brief">Proactive attack selection and reactive countering competed when sharing one tree. Splitting into two parallel trees gave each its own priority — one phase-gated, one reading live player state.</p>
+        <button class="dec-cta" onclick="openDecisionModal('modal-d02')">Design Analysis <span class="dec-cta-arrow">→</span></button>
       </div>
       <div class="decision-card">
         <div class="dec-num">Decision 03</div>
-        <div class="dec-name">Frame-Precise Deflection with a Flash Cue</div>
-        <div class="dec-body">
-          Tight deflection windows reward skill, but pure timing gates frustrate new
-          players. I added a brief visual flash at the window start — skilled players
-          read animations and ignore it; the flash is a learning-curve safety net.
-          Tested across four playtests and removed frustration spikes without
-          diluting the skill ceiling.
-        </div>
+        <div class="dec-name">Each Attack as a Layered Combat Puzzle</div>
+        <p class="decision-brief">Attacks that just deal damage turn fights into memorization. Every attack in TOG imposes a constraint on position, timing, and mechanic choice — and resolves into a specific opening as the reward for reading it correctly.</p>
+        <button class="dec-cta" onclick="openDecisionModal('modal-d03')">Design Analysis <span class="dec-cta-arrow">→</span></button>
       </div>
     </div>
 
@@ -1097,6 +1301,73 @@
         <p>8-directional state machine driven by speed, angle, and weapon stance. Covers
            guard strafe, aim locomotion, and multi-tier landings — blended with orientation
            warping and procedural foot IK.</p>
+      </div>
+    </div>
+
+    <!-- Boss AI Architecture -->
+    <div class="decisions-eyebrow fade-up" style="margin-top:2.8rem;">Boss AI Architecture — Arelius</div>
+
+    <div class="ai-stats-row fade-up">
+      <div class="ai-stat">
+        <span class="ai-stat-num">70+</span>
+        <span class="ai-stat-label">Named Attacks</span>
+      </div>
+      <div class="ai-stat">
+        <span class="ai-stat-num">3</span>
+        <span class="ai-stat-label">Fight Phases</span>
+      </div>
+      <div class="ai-stat">
+        <span class="ai-stat-num">8</span>
+        <span class="ai-stat-label">Custom Decorators</span>
+      </div>
+      <div class="ai-stat">
+        <span class="ai-stat-num">9</span>
+        <span class="ai-stat-label">Custom Tasks</span>
+      </div>
+      <div class="ai-stat">
+        <span class="ai-stat-num">2</span>
+        <span class="ai-stat-label">Parallel Trees</span>
+      </div>
+    </div>
+
+    <div class="bt-tree fade-up">
+      <div class="bt-label">// Behavior Tree Hierarchy</div>
+      <div class="bt-row"><span class="bt-connector">▸</span><span class="bt-node"><span class="bt-key">BT_Arelius</span> <span class="bt-comment">— root selector</span></span></div>
+      <div class="bt-row bt-indent"><span class="bt-connector">├─</span><span class="bt-node">BT_PassiveState</span></div>
+      <div class="bt-row bt-indent"><span class="bt-connector">└─</span><span class="bt-node"><span class="bt-key">BT_Arelius_Combat</span> <span class="bt-comment">— phase-gated via BTD_CheckPhase</span></span></div>
+      <div class="bt-row bt-indent-2"><span class="bt-connector">├─</span><span class="bt-node"><span class="bt-key">BT_Combat_Phase1</span> <span class="bt-comment">— melee combos, lunges, counters, gap-closers</span></span></div>
+      <div class="bt-row bt-indent-2"><span class="bt-connector">└─</span><span class="bt-node"><span class="bt-key">BT_Combat_Phase2</span> <span class="bt-comment">— adds teleport attacks, projectile slashes, vanish</span></span></div>
+      <div style="margin-top:0.9rem;"></div>
+      <div class="bt-row"><span class="bt-connector">▸</span><span class="bt-node"><span class="bt-key">BT_Arelius_DefensiveTree</span> <span class="bt-comment">— reactive, reads player AISubAction &amp; AIReactionSubAction</span></span></div>
+    </div>
+
+    <div class="ai-tags fade-up">
+      <div class="ai-tag-group">
+        <div class="ai-tag-title">Custom Decorators</div>
+        <div class="ai-tag-list">
+          <span class="ai-tag">BTD_CheckPhase</span>
+          <span class="ai-tag">BTD_InRange</span>
+          <span class="ai-tag">BTD_InIdealRange</span>
+          <span class="ai-tag">BTD_PlayerVelocityWithinDesiredValues</span>
+          <span class="ai-tag">BTD_FollowUpChance</span>
+          <span class="ai-tag">BTD_CheckAttackParameters</span>
+          <span class="ai-tag">BTD_CheckIfAttackTargetNull</span>
+          <span class="ai-tag">BTD_IsWeaponEquipped</span>
+        </div>
+      </div>
+      <div class="ai-tag-group">
+        <div class="ai-tag-title">Custom Tasks</div>
+        <div class="ai-tag-list">
+          <span class="ai-tag">BTT_Attacks</span>
+          <span class="ai-tag">BTT_Dash</span>
+          <span class="ai-tag">BTT_Strafe</span>
+          <span class="ai-tag">BTT_MoveToTarget</span>
+          <span class="ai-tag">BTT_SetMovementMode</span>
+          <span class="ai-tag">BTT_EquipWeapon</span>
+          <span class="ai-tag">BTT_UnequipWeapon</span>
+          <span class="ai-tag">BTT_FocusTarget</span>
+          <span class="ai-tag">BTT_HitReaction</span>
+        </div>
       </div>
     </div>
 
@@ -1304,6 +1575,96 @@
     </ul>
   </footer>
 
+  <!-- ── Decision Modal 01 ────────────────────────────────────────── -->
+  <div id="modal-d01" class="decision-overlay">
+    <div class="decision-modal">
+      <button class="dm-close" onclick="closeDecisionModal('modal-d01')">&times;</button>
+      <div class="dm-eyebrow">Decision 01</div>
+      <div class="dm-title">Per-Attack Data Structs<br/>Over Baked Blueprint Logic</div>
+
+      <div class="dm-section">
+        <div class="dm-section-label">Architecture</div>
+        <h4>The F_AreliusAttackParameters Struct</h4>
+        <p>Early attack implementations had behavior scattered across Blueprint nodes — movement speed, starting position, velocity multipliers, and animation all baked in separately per attack. Changing one parameter meant tracing through nodes; cross-attack comparison was impossible.</p>
+        <p>I centralized everything into <span class="dm-code">F_AreliusAttackParameters</span> — a single struct bundling AnimMontage, MovementParameters (velocity curve), StartingPosition, AttackSpecificPlayRateCurveName, ScaleAttackVelocityWithPlayRate, DistanceFromAttackTarget, VelocityMultiplier, and DualMontage. Attack logic reads the struct and executes. It doesn't decide what to execute. Behavior lives entirely in data.</p>
+      </div>
+
+      <div class="dm-section">
+        <div class="dm-section-label">Iteration Workflow</div>
+        <h4>Tuning at Data-Asset Speed</h4>
+        <p>With parameters baked into nodes, every tuning pass required a recompile. With the struct, any parameter is a single field in a data asset — open, change, save. The loop dropped from minutes to seconds per adjustment, which matters when feel-based tuning requires dozens of micro-iterations per attack.</p>
+        <p>Comparing two attacks side-by-side became trivial. <span class="dm-code">LungeAttack</span> and <span class="dm-code">DashBackQuickThrustAttack</span> could be opened simultaneously — their VelocityMultiplier, DistanceFromAttackTarget, and PlayRate values compared directly. This made the tuning process fast enough to work on instinct rather than planning.</p>
+      </div>
+
+      <div class="dm-section">
+        <div class="dm-section-label">Scalability</div>
+        <h4>New Enemies Without New Architecture</h4>
+        <p><span class="dm-code">BTT_Attacks</span> (the main dispatcher) and <span class="dm-code">BTD_CheckAttackParameters</span> (the viability decorator) both read <span class="dm-code">F_AreliusAttackParameters</span>. The entire AI toolset is agnostic to which attack it's executing — it reads the struct and acts. A future enemy only needs a new set of parameter assets. No changes to the behavior tree, no changes to the task or decorator logic.</p>
+        <p>The attack pool itself is data. Attacks can be added, removed, or reordered without touching code. Phase transitions swap pools by routing the BT at the tree level — the attacks themselves carry everything needed to execute.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Decision Modal 02 ────────────────────────────────────────── -->
+  <div id="modal-d02" class="decision-overlay">
+    <div class="decision-modal">
+      <button class="dm-close" onclick="closeDecisionModal('modal-d02')">&times;</button>
+      <div class="dm-eyebrow">Decision 02</div>
+      <div class="dm-title">Two Parallel Trees:<br/>Reactive and Probabilistic</div>
+
+      <div class="dm-section">
+        <div class="dm-section-label">Reactive Defense</div>
+        <h4>BT_Arelius_DefensiveTree</h4>
+        <p>In the original single-tree design, reactive counters competed with attack selection for execution priority. When a parry opportunity was detected, the tree had to finish its current evaluation before responding — and often didn't. The reaction felt slow and disconnected from what the player actually did.</p>
+        <p><span class="dm-code">BT_Arelius_DefensiveTree</span> runs as a parallel tree, reading the player's AISubAction and AIReactionSubAction blackboard keys directly. A parry triggers a specific counter sequence chosen for that exact situation. A blocked hit triggers a different one. A direct hit on the boss triggers another. The boss's reactive side now has its own execution priority, completely separate from what the boss was trying to do next.</p>
+      </div>
+
+      <div class="dm-section">
+        <div class="dm-section-label">Non-Deterministic Selection</div>
+        <h4>Emergent Fights via BTD_FollowUpChance</h4>
+        <p><span class="dm-code">BTD_FollowUpChance</span> is a probabilistic decorator — it passes or fails based on a tunable probability value. When it fails, the boss doesn't follow up. It repositions, pauses, or resets instead. The same attack sequence can resolve differently across different runs of the same exchange.</p>
+        <p>Players who memorize a punish window will occasionally be wrong — not because the attack changed, but because the follow-up didn't come this time. This keeps the encounter from fully normalizing regardless of how many attempts the player has made. The fight stays hard because of player attention, not just accumulated muscle memory.</p>
+      </div>
+
+      <div class="dm-section">
+        <div class="dm-section-label">Phase Gating</div>
+        <h4>BTD_CheckPhase — Clean Pool Routing</h4>
+        <p>Phase 1 has no access to projectile attacks or teleport sequences — those sub-trees simply don't execute when <span class="dm-code">BTD_CheckPhase</span> returns false. No conditional logic lives inside the attack nodes themselves. The gating is entirely at the tree level: routes branch, sub-trees either run or don't.</p>
+        <p>When Phase 2 unlocks, the new attacks aren't introduced gradually — they're available immediately. The first time Arelius throws a <span class="dm-code">ThrowSwordTeleport</span>, the player's spatial model from Phase 1 breaks. This is deliberate: the phase transition's job is to reset the player's assumptions and force re-engagement. A boss fight that gets easier as it goes isn't designed — it's just completed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Decision Modal 03 ────────────────────────────────────────── -->
+  <div id="modal-d03" class="decision-overlay">
+    <div class="decision-modal">
+      <button class="dm-close" onclick="closeDecisionModal('modal-d03')">&times;</button>
+      <div class="dm-eyebrow">Decision 03</div>
+      <div class="dm-title">Each Attack as a<br/>Layered Combat Puzzle</div>
+
+      <div class="dm-section">
+        <div class="dm-section-label">Attack Design</div>
+        <h4>Three Constraints, One Opening</h4>
+        <p>Every attack was designed against three constraints: speed and range define which player mechanics are viable; the boss's movement during the attack defines viable positioning; and the specific opening left by a correct read is the reward for understanding both. The constraints aren't arbitrary — they're the attack's argument about where the player should be and what they should do next.</p>
+        <p><span class="dm-code">LungeAttack</span> punishes retreating straight back — the answer is lateral, which also positions the player for a punish. <span class="dm-code">DashWindUpThrust</span> uses a long wind-up as a feint: the boss reads early parry attempts and extends the animation to catch reflex parries, training patience over reaction. <span class="dm-code">PunchCounterAttack</span> only fires when the player approaches — <span class="dm-code">BTD_PlayerVelocityWithinDesiredValues</span> detects the approach vector and routes to the counter, meaning the player's own aggression becomes the trigger. Aggression has to be earned, not assumed.</p>
+      </div>
+
+      <div class="dm-section">
+        <div class="dm-section-label">Combo Design</div>
+        <h4>Different Endings, Different Openings</h4>
+        <p>Each combo sequence ends in a different state and leaves a different opening — the player's correct response to a resolved combo should always be context-dependent, never rote. A resolved <span class="dm-code">3AttackSeq</span> ends in recovery lag that rewards close pressure. <span class="dm-code">GapCloserAttack-CirclCombo</span> cuts off retreat and circles — dodging away tightens the trap, dodging into the combo breaks it. <span class="dm-code">HeavyCombo</span> is slow but staggering; the window is generous but only opens if the player holds their ground through the intimidation.</p>
+        <p>Mix-ups close the loop. If the player starts dodging predictably, the boss redirects its follow-up to catch the dodge. Dodge the charged attack too early and Arelius extends it to punish the read — the same mechanic Sekiro's Owl uses. Combos aren't sequences to memorize. They're conversations that branch on the player's response. The player who reads correctly earns the opening; the player running muscle memory gets caught.</p>
+      </div>
+
+      <div class="dm-section">
+        <div class="dm-section-label">Pacing &amp; Flow State</div>
+        <h4>Engineering the Entry and the Exit</h4>
+        <p>Flow state in a combat puzzle game is the moment the player stops deliberating and starts reading — where reaction becomes intuition and the fight feels like a rhythm rather than a problem. Every attack in TOG builds toward this: telegraphed attack paths (golden threads lighting the weapon before a swing) create the foundation; mix-ups and phase transitions break it deliberately. The question isn't whether the player will enter flow — it's how fast they get there, and what it feels like when they're knocked out of it.</p>
+        <p>Phase 1 builds the model. Arelius stays grounded, attacks are melee-range, the rhythm is learnable. The goal is to get the player into flow on those terms. Phase 2 introduces <span class="dm-code">ThrowSwordTeleport</span> and <span class="dm-code">VanishingStep</span> — the spatial model breaks, flow is disrupted. This is the reset: remove the one thing the player was relying on, then give them the space to rebuild. The design question for every disruption isn't "is this fair" — it's "how long does it take the player to find their footing again, and does getting there feel earned?"</p>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Lightbox ───────────────────────────────────────────────── -->
   <div id="lightbox">
     <span id="lightbox-close" onclick="closeLightbox()">&times;</span>
@@ -1437,9 +1798,27 @@
       if (e.target === this) closeLightbox();
     });
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'Escape') {
+        closeLightbox();
+        document.querySelectorAll('.decision-overlay.open').forEach(m => closeDecisionModal(m.id));
+      }
       if (e.key === 'ArrowRight') lightboxNav(1);
       if (e.key === 'ArrowLeft') lightboxNav(-1);
+    });
+
+    /* ── Decision Modals ── */
+    function openDecisionModal(id) {
+      document.getElementById(id).classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDecisionModal(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.querySelectorAll('.decision-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) closeDecisionModal(this.id);
+      });
     });
   </script>
 
