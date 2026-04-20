@@ -510,6 +510,7 @@
     }
     .gallery-strip.g3 { grid-template-columns: repeat(3, 1fr); }
     .gallery-strip.g4 { grid-template-columns: repeat(4, 1fr); }
+    .gallery-strip.g3-featured { grid-template-columns: 2fr 1fr 1fr; }
 
     .gallery-thumb {
       border-radius: 7px;
@@ -973,9 +974,6 @@
     <!-- Gallery -->
     <div class="gallery-strip fade-up">
       <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
-        <img src="PortfolioPieces/ThreadsOfGod/Arelius Launch Attack.jpg" alt="Arelius launch attack" />
-      </div>
-      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
         <img src="PortfolioPieces/ThreadsOfGod/HighresScreenshot00000.jpg" alt="White light trail attack" />
       </div>
       <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
@@ -987,16 +985,19 @@
       <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
         <img src="PortfolioPieces/ThreadsOfGod/Arelius Pose Attack.jpg" alt="Combat at sunset" />
       </div>
+      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="PortfolioPieces/ThreadsOfGod/AreliusWindUpAttack.jpg" alt="Wind-up attack" />
+      </div>
     </div>
-    <div class="gallery-strip g3 fade-up" style="margin-bottom:0.5rem;">
+    <div class="gallery-strip g3-featured fade-up" style="margin-bottom:0.5rem;">
+      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="PortfolioPieces/ThreadsOfGod/Arelius Launch Attack.jpg" alt="Arelius launch attack" />
+      </div>
       <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
         <img src="PortfolioPieces/ThreadsOfGod/AreliusCircleAttack2.jpg" alt="Circle attack variant" />
       </div>
       <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
         <img src="PortfolioPieces/ThreadsOfGod/HighresScreenshot00001.jpg" alt="Overhead strike" />
-      </div>
-      <div class="gallery-thumb" onclick="openLightbox(this.querySelector('img').src)">
-        <img src="PortfolioPieces/ThreadsOfGod/AreliusWindUpAttack.jpg" alt="Wind-up attack" />
       </div>
     </div>
 
