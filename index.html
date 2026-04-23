@@ -1057,6 +1057,34 @@
       border-bottom: 1px solid var(--border);
     }
 
+    .dm-tldr {
+      display: flex;
+      align-items: baseline;
+      gap: 0.85rem;
+      margin: -0.4rem 0 2rem;
+      padding: 0.85rem 1rem 0.85rem 0.95rem;
+      background: linear-gradient(90deg, rgba(212,137,10,0.10), rgba(212,137,10,0.02));
+      border-left: 2px solid var(--amber);
+      border-radius: 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px) 0;
+    }
+    .dm-tldr-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      flex: 0 0 auto;
+      transform: translateY(-1px);
+    }
+    .dm-tldr-text {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.5;
+      letter-spacing: 0.005em;
+    }
+
     .dm-section {
       margin-bottom: 2rem;
       padding-bottom: 2rem;
@@ -1721,25 +1749,30 @@
       <div class="dm-eyebrow">Decision 01</div>
       <div class="dm-title">Per-Attack Data Structs<br/>Over Baked Blueprint Logic</div>
 
+      <div class="dm-tldr">
+        <span class="dm-tldr-tag">TL;DR</span>
+        <span class="dm-tldr-text">All boss attack behavior lives in data. Adding a new enemy means new parameter assets — never new logic.</span>
+      </div>
+
       <div class="dm-section">
         <div class="dm-section-label">Architecture</div>
         <h4>The F_AreliusAttackParameters Struct</h4>
-        <p>Early attack implementations had behavior scattered across Blueprint nodes — movement speed, starting position, velocity multipliers, and animation all baked in separately per attack. Changing one parameter meant tracing through nodes; cross-attack comparison was impossible.</p>
-        <p>I centralized everything into <span class="dm-code">F_AreliusAttackParameters</span> — a single struct bundling AnimMontage, MovementParameters (velocity curve), StartingPosition, AttackSpecificPlayRateCurveName, ScaleAttackVelocityWithPlayRate, DistanceFromAttackTarget, VelocityMultiplier, and DualMontage. Attack logic reads the struct and executes. It doesn't decide what to execute. Behavior lives entirely in data.</p>
+        <p>Early attacks had behavior scattered across Blueprint nodes — movement, starting position, velocity, animation each baked separately per attack. Tuning meant tracing through nodes; comparing two attacks was impossible.</p>
+        <p><span class="dm-code">F_AreliusAttackParameters</span> bundles AnimMontage, MovementParameters (velocity curve), StartingPosition, PlayRate curve name, DistanceFromAttackTarget, VelocityMultiplier, and DualMontage into one struct. Attack logic reads the struct and executes — it doesn't decide what to execute.</p>
       </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Iteration Workflow</div>
         <h4>Tuning at Data-Asset Speed</h4>
-        <p>With parameters baked into nodes, every tuning pass required a recompile. With the struct, any parameter is a single field in a data asset — open, change, save. The loop dropped from minutes to seconds per adjustment, which matters when feel-based tuning requires dozens of micro-iterations per attack.</p>
-        <p>Comparing two attacks side-by-side became trivial. <span class="dm-code">LungeAttack</span> and <span class="dm-code">DashBackQuickThrustAttack</span> could be opened simultaneously — their VelocityMultiplier, DistanceFromAttackTarget, and PlayRate values compared directly. This made the tuning process fast enough to work on instinct rather than planning.</p>
+        <p>Old: every tuning pass required a recompile. New: any parameter is a single field on a data asset — open, change, save. Minutes per adjustment became seconds, which matters when feel-tuning needs dozens of micro-iterations per attack.</p>
+        <p>Comparing two attacks became trivial: open <span class="dm-code">LungeAttack</span> and <span class="dm-code">DashBackQuickThrustAttack</span> side-by-side, line up their VelocityMultiplier, DistanceFromAttackTarget, and PlayRate values directly. Fast enough to work on instinct, not planning.</p>
       </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Scalability</div>
         <h4>New Enemies Without New Architecture</h4>
-        <p><span class="dm-code">BTT_Attacks</span> (the main dispatcher) and <span class="dm-code">BTD_CheckAttackParameters</span> (the viability decorator) both read <span class="dm-code">F_AreliusAttackParameters</span>. The entire AI toolset is agnostic to which attack it's executing — it reads the struct and acts. A future enemy only needs a new set of parameter assets. No changes to the behavior tree, no changes to the task or decorator logic.</p>
-        <p>The attack pool itself is data. Attacks can be added, removed, or reordered without touching code. Phase transitions swap pools by routing the BT at the tree level — the attacks themselves carry everything needed to execute.</p>
+        <p><span class="dm-code">BTT_Attacks</span> (dispatcher) and <span class="dm-code">BTD_CheckAttackParameters</span> (viability decorator) both read <span class="dm-code">F_AreliusAttackParameters</span>. The AI toolset is agnostic to which attack it's executing. A new enemy needs new parameter assets — no BT changes, no task or decorator changes.</p>
+        <p>The attack pool itself is data. Attacks can be added, removed, or reordered without touching code. Phase transitions swap pools at the tree level — each attack carries everything it needs to execute.</p>
       </div>
     </div>
   </div>
@@ -1751,25 +1784,30 @@
       <div class="dm-eyebrow">Decision 02</div>
       <div class="dm-title">Two Parallel Trees:<br/>Reactive and Probabilistic</div>
 
+      <div class="dm-tldr">
+        <span class="dm-tldr-tag">TL;DR</span>
+        <span class="dm-tldr-text">Reactive and proactive AI got their own trees so neither could starve the other.</span>
+      </div>
+
       <div class="dm-section">
         <div class="dm-section-label">Reactive Defense</div>
         <h4>BT_Arelius_DefensiveTree</h4>
-        <p>In the original single-tree design, reactive counters competed with attack selection for execution priority. When a parry opportunity was detected, the tree had to finish its current evaluation before responding — and often didn't. The reaction felt slow and disconnected from what the player actually did.</p>
-        <p><span class="dm-code">BT_Arelius_DefensiveTree</span> runs as a parallel tree, reading the player's AISubAction and AIReactionSubAction blackboard keys directly. A parry triggers a specific counter sequence chosen for that exact situation. A blocked hit triggers a different one. A direct hit on the boss triggers another. The boss's reactive side now has its own execution priority, completely separate from what the boss was trying to do next.</p>
+        <p>In the original single-tree design, reactive counters competed with attack selection for priority. When a parry opportunity arrived, the tree had to finish its current evaluation first — and often didn't. The reaction felt slow and disconnected.</p>
+        <p><span class="dm-code">BT_Arelius_DefensiveTree</span> runs in parallel, reading the player's AISubAction and AIReactionSubAction keys directly. Parry, block, direct hit — each routes to its own counter sequence. The reactive side has its own execution priority, separate from whatever the boss was trying to do next.</p>
       </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Non-Deterministic Selection</div>
         <h4>Emergent Fights via BTD_FollowUpChance</h4>
-        <p><span class="dm-code">BTD_FollowUpChance</span> is a probabilistic decorator — it passes or fails based on a tunable probability value. When it fails, the boss doesn't follow up. It repositions, pauses, or resets instead. The same attack sequence can resolve differently across different runs of the same exchange.</p>
-        <p>Players who memorize a punish window will occasionally be wrong — not because the attack changed, but because the follow-up didn't come this time. This keeps the encounter from fully normalizing regardless of how many attempts the player has made. The fight stays hard because of player attention, not just accumulated muscle memory.</p>
+        <p><span class="dm-code">BTD_FollowUpChance</span> is a probabilistic decorator — passes or fails on a tunable probability. When it fails, the boss doesn't follow up; it repositions, pauses, or resets. The same exchange resolves differently across runs.</p>
+        <p>Players who memorize a punish window will occasionally be wrong — not because the attack changed, but because the follow-up didn't come this time. The fight stays hard because of attention, not muscle memory.</p>
       </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Phase Gating</div>
         <h4>BTD_CheckPhase — Clean Pool Routing</h4>
-        <p>Phase 1 has no access to projectile attacks or teleport sequences — those sub-trees simply don't execute when <span class="dm-code">BTD_CheckPhase</span> returns false. No conditional logic lives inside the attack nodes themselves. The gating is entirely at the tree level: routes branch, sub-trees either run or don't.</p>
-        <p>When Phase 2 unlocks, the new attacks aren't introduced gradually — they're available immediately. The first time Arelius throws a <span class="dm-code">ThrowSwordTeleport</span>, the player's spatial model from Phase 1 breaks. This is deliberate: the phase transition's job is to reset the player's assumptions and force re-engagement. A boss fight that gets easier as it goes isn't designed — it's just completed.</p>
+        <p>Phase 1 has no access to projectile or teleport sub-trees — they simply don't execute when <span class="dm-code">BTD_CheckPhase</span> returns false. The gating is at the tree level, not inside the attacks: routes branch, sub-trees either run or don't.</p>
+        <p>When Phase 2 unlocks, the new attacks aren't introduced gradually — they're available immediately. The first time Arelius throws a <span class="dm-code">ThrowSwordTeleport</span>, the player's spatial model from Phase 1 breaks. The phase transition's job is to reset assumptions and force re-engagement. A boss fight that gets easier as it goes isn't designed — it's just completed.</p>
       </div>
     </div>
   </div>
@@ -1781,11 +1819,16 @@
       <div class="dm-eyebrow">Decision 03</div>
       <div class="dm-title">Each Attack as a<br/>Layered Combat Puzzle</div>
 
+      <div class="dm-tldr">
+        <span class="dm-tldr-tag">TL;DR</span>
+        <span class="dm-tldr-text">Every attack is a constraint problem with one correct opening — designed to be read, not memorized.</span>
+      </div>
+
       <div class="dm-section">
         <div class="dm-section-label">Attack Design</div>
         <h4>Three Constraints, One Opening</h4>
-        <p>Every attack was designed against three constraints: speed and range define which player mechanics are viable; the boss's movement during the attack defines viable positioning; and the specific opening left by a correct read is the reward for understanding both. The constraints aren't arbitrary — they're the attack's argument about where the player should be and what they should do next.</p>
-        <p><span class="dm-code">LungeAttack</span> punishes retreating straight back — the answer is lateral, which also positions the player for a punish. <span class="dm-code">DashWindUpThrust</span> uses a long wind-up as a feint: the boss reads early parry attempts and extends the animation to catch reflex parries, training patience over reaction. <span class="dm-code">PunchCounterAttack</span> only fires when the player approaches — <span class="dm-code">BTD_PlayerVelocityWithinDesiredValues</span> detects the approach vector and routes to the counter, meaning the player's own aggression becomes the trigger. Aggression has to be earned, not assumed.</p>
+        <p>Every attack imposes three constraints: speed and range gate which player mechanics work; boss movement gates viable positioning; the opening left by a correct read is the reward for understanding both. The constraints aren't arbitrary — they're the attack's argument about where the player should be.</p>
+        <p><span class="dm-code">LungeAttack</span> punishes a straight retreat — the answer is lateral, which also sets up a punish. <span class="dm-code">DashWindUpThrust</span> uses a long wind-up as a feint: the boss reads early parry attempts and extends the animation to catch them, training patience over reaction. <span class="dm-code">PunchCounterAttack</span> only fires when the player approaches — <span class="dm-code">BTD_PlayerVelocityWithinDesiredValues</span> reads the vector and routes to it, so the player's aggression becomes the trigger. Aggression has to be earned, not assumed.</p>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Default Phase One Attack Sequence.png" alt="BT_Combat_Phase1 Core Attack Chain — selector routing into composite attack sub-trees" onclick="openLightbox(this.src)" />
           <div class="dm-figcaption">BT_Combat_Phase1 — Core Attack Chain selector &amp; composite sub-trees</div>
@@ -1795,8 +1838,8 @@
       <div class="dm-section">
         <div class="dm-section-label">Combo Design</div>
         <h4>Different Endings, Different Openings</h4>
-        <p>Each combo sequence ends in a different state and leaves a different opening — the player's correct response to a resolved combo should always be context-dependent, never rote. A resolved <span class="dm-code">3AttackSeq</span> ends in recovery lag that rewards close pressure. <span class="dm-code">GapCloserAttack-CirclCombo</span> cuts off retreat and circles — dodging away tightens the trap, dodging into the combo breaks it. <span class="dm-code">HeavyCombo</span> is slow but staggering; the window is generous but only opens if the player holds their ground through the intimidation.</p>
-        <p>Mix-ups close the loop. If the player starts dodging predictably, the boss redirects its follow-up to catch the dodge. Dodge the charged attack too early and Arelius extends it to punish the read — the same mechanic Sekiro's Owl uses. Combos aren't sequences to memorize. They're conversations that branch on the player's response. The player who reads correctly earns the opening; the player running muscle memory gets caught.</p>
+        <p>Each combo ends in a different state and leaves a different opening — the correct response is context-dependent, not rote. <span class="dm-code">3AttackSeq</span> ends in recovery lag that rewards close pressure. <span class="dm-code">GapCloserAttack-CirclCombo</span> cuts off retreat and circles — dodging away tightens the trap, dodging in breaks it. <span class="dm-code">HeavyCombo</span> is slow but staggering — the window opens only if the player holds their ground.</p>
+        <p>Mix-ups close the loop. Dodge predictably and Arelius redirects to catch the dodge; dodge the charged attack early and he extends it to punish the read — same mechanic as Sekiro's Owl. Combos aren't sequences to memorize, they're conversations. Read correctly, earn the opening; run muscle memory, get caught.</p>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Jump Attack Variation Chain.png" alt="Jump attack variation chain — reactive follow-up sub-attacks swapping based on player action" onclick="openLightbox(this.src)" />
           <div class="dm-figcaption">Jump Attack variation chain — follow-ups re-route by player action</div>
@@ -1806,10 +1849,10 @@
       <div class="dm-section">
         <div class="dm-section-label">Adaptive Setpiece</div>
         <h4>One Attack, Four Fights</h4>
-        <p>AAA setpieces are almost always single authored branches — Genichiro's mid-fight arrow volley in Sekiro plays the same way every time. Arelius's Phase 2 <span class="dm-code">ThrowSwordTeleport</span> is built the other way: one opening attack that forks into four distinct cinematic exchanges, each triggered by how the player chose to defend.</p>
+        <p>AAA setpieces are usually single authored branches — Genichiro's mid-fight arrow volley plays the same way every time. Arelius's Phase 2 <span class="dm-code">ThrowSwordTeleport</span> is built the other way: one opening, four distinct cinematic exchanges, each triggered by how the player defended.</p>
         <p>Hit — the blade embeds, Arelius teleports to the wound, a QTE finisher rips the sword free. Block — the thrown sword spins mid-air, the boss teleports onto its arc, slams down on the descent. Dodge — the blade freezes beside the player as a lingering threat; Arelius teleports to it and opens a full follow-up combo. Block that follow-up's opener and the sword is knocked clean from his hand — a second teleport reappears him at the disarmed blade, committed to a slam.</p>
-        <p>The seam is authored in animation, not logic. <span class="dm-code">AN_InitiateTeleportToSword</span> fires from inside each branch's montage, stitching the exchange into one unbroken moment — no BT re-evaluation between outcomes, no idle recovery, no decision stutter. The player reads one cinematic attack; the system plays whichever of the four they earned. The setpiece feel holds because the transitions are as authored as the entry — and because the scene the player sees is the scene they caused.</p>
-        <p>This is also the one attack that breaks TOG's standard authoring pattern. Every other attack flows through a generalized blueprint system — fill out the attack data struct, arrange the behavior tree, and a shared runtime handles execution. The four branches here needed bespoke event graph code per branch: custom logic for teleport staging, sword visibility, projectile end-state, and per-outcome reentry. The generalized system handles the rest of the fight; the setpiece earned its own code.</p>
+        <p>The seam is in animation, not logic. <span class="dm-code">AN_InitiateTeleportToSword</span> fires from inside each branch's montage, stitching the exchange into one moment — no BT re-evaluation, no idle recovery. The player reads one cinematic attack; the system plays whichever of the four they earned. The scene the player sees is the scene they caused.</p>
+        <p>This breaks TOG's standard authoring pattern. Every other attack runs through a generalized system — fill out the data struct, arrange the BT, the shared runtime executes. The four branches here needed bespoke event graphs per branch: teleport staging, sword visibility, projectile end-state, per-outcome reentry. The setpiece earned its own code.</p>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Sword Throw Teleport Chain.png" alt="Phase 2 ThrowSwordTeleport sub-tree with BTD_FollowUpChance gate, cooldowns, and QuickFarRangeDash routing" onclick="openLightbox(this.src)" />
           <div class="dm-figcaption">ThrowSwordTeleport chain — FollowUpChance gate &amp; dash routing</div>
@@ -1826,9 +1869,9 @@
 
       <div class="dm-section">
         <div class="dm-section-label">Pacing &amp; Flow State</div>
-        <h4>Engineering the Entry and the Exit</h4>
-        <p>Flow state in a combat puzzle game is the moment the player stops deliberating and starts reading — where reaction becomes intuition and the fight feels like a rhythm rather than a problem. Every attack in TOG builds toward this: telegraphed attack paths (golden threads lighting the weapon before a swing) create the foundation; mix-ups and phase transitions break it deliberately. The question isn't whether the player will enter flow — it's how fast they get there, and what it feels like when they're knocked out of it.</p>
-        <p>Phase 1 builds the model. Arelius stays grounded, attacks are melee-range, the rhythm is learnable. The goal is to get the player into flow on those terms. Phase 2 introduces <span class="dm-code">ThrowSwordTeleport</span> and <span class="dm-code">VanishingStep</span> — the spatial model breaks, flow is disrupted. This is the reset: remove the one thing the player was relying on, then give them the space to rebuild. The design question for every disruption isn't "is this fair" — it's "how long does it take the player to find their footing again, and does getting there feel earned?"</p>
+        <h4>Designing the Entry and the Exit</h4>
+        <p>Flow state is the moment the player stops deliberating and starts reading — when reaction becomes intuition and the fight feels like rhythm. Every attack builds toward this: telegraphed paths (golden threads lighting the weapon before a swing) create the foundation; mix-ups and phase transitions break it deliberately. The question isn't whether the player enters flow — it's how fast they get there and what it feels like to be knocked out.</p>
+        <p>Phase 1 builds the model. Arelius stays grounded, melee-range, learnable. Phase 2 introduces <span class="dm-code">ThrowSwordTeleport</span> and <span class="dm-code">VanishingStep</span> — the spatial model breaks, flow is disrupted. The reset: remove what the player was relying on, then give them space to rebuild. The design question isn't "is this fair" — it's "how long until they find their footing, and does getting there feel earned?"</p>
       </div>
     </div>
   </div>
@@ -1840,18 +1883,23 @@
       <div class="dm-eyebrow">Decision 04</div>
       <div class="dm-title">The Defensive Tree<br/>as the Climax</div>
 
+      <div class="dm-tldr">
+        <span class="dm-tldr-tag">TL;DR</span>
+        <span class="dm-tldr-text">The defensive exchange is the fight's peak — every other AI system hands off into it.</span>
+      </div>
+
       <div class="dm-section">
         <div class="dm-section-label">Design Intent</div>
         <h4>The Fight's Peak Is a Two-Way Conversation</h4>
-        <p>Most boss fights crescendo on the boss's turn — the unblockable, the cinematic sweep, the moment the player is reduced to reading a single cue. TOG inverts that: the crescendo is the exchange itself. The defensive tree is the moment both fighters are reading each other simultaneously — the player trying to punish, the boss trying to counter-punish — and it runs at the fastest pace in the fight.</p>
-        <p>Every other system in the AI is routed toward this moment. The probabilistic attack selection sets up the pressure that earns an opening. Phase gating decides what tools are in play when the opening arrives. Combo branching decides which exchange the opening becomes. All of it hands off cleanly into the defensive tree — the one place the fight is actually being decided.</p>
+        <p>Most boss fights crescendo on the boss's turn — the unblockable, the cinematic sweep, the moment the player is reduced to reading one cue. TOG inverts it: the crescendo is the exchange itself. The defensive tree is where both fighters are reading each other simultaneously — and it runs at the fastest pace in the fight.</p>
+        <p>Every other AI system routes toward this moment. Probabilistic selection sets up the pressure that earns an opening. Phase gating decides what tools are in play when the opening arrives. Combo branching decides which exchange the opening becomes. All of it hands off into the defensive tree — the one place the fight is actually being decided.</p>
       </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Counter-Attack Logic</div>
         <h4>Hit-and-Run Gets Caught</h4>
-        <p>Two player behaviors route to two different answers. Land a single hit and disengage — the boss counter-attacks immediately, punishing the retreat before the player resets to neutral. Commit to sustained pressure — the boss absorbs the first hits, then at a threshold perfect-parries and opens its own close-range defensive combo, taking back the exchange from inside it.</p>
-        <p>The asymmetry is the point. Hit-and-run would normally be the safe option against a reactive boss; TOG makes it the punished one. Sustained aggression would normally be reckless; TOG makes it viable, but only if the player can survive the perfect-parry answer it provokes. Breaking through requires reading which counter the boss is setting up — a direct counter means the player didn't commit, a perfect-parry means the player over-committed. Neither is a free option.</p>
+        <p>Two player behaviors, two answers. Land a single hit and disengage — the boss counter-attacks immediately, punishing the retreat before the player resets to neutral. Commit to sustained pressure — the boss absorbs the first hits, then perfect-parries at a threshold and opens its own close-range defensive combo, taking back the exchange from inside it.</p>
+        <p>The asymmetry is the point. Hit-and-run is normally safe against a reactive boss; TOG makes it the punished option. Sustained aggression is normally reckless; TOG makes it viable, if you survive the perfect-parry it provokes. Breaking through means reading which counter is being set up — direct counter means the player didn't commit, perfect-parry means they over-committed. Neither is free.</p>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Defensive Tree.png" alt="BT_Arelius_DefensiveTree showing the AI Counter Attack branch and the General Reset Logic that runs after defensive actions finish" onclick="openLightbox(this.src)" />
           <div class="dm-figcaption">BT_Arelius_DefensiveTree — Counter Attack branch &amp; Reset Logic</div>
@@ -1861,8 +1909,8 @@
       <div class="dm-section">
         <div class="dm-section-label">Pace Reset</div>
         <h4>Break-Away as Rhythm Control</h4>
-        <p>Inside an extended defensive exchange, the boss will occasionally break momentum and create space — a backward dash, a jump-back, a <span class="dm-code">QuickFarRangeDash</span> — then re-engage on a new angle. These aren't escape moves. They're rhythm resets. Without them, every defensive exchange settles into the same tempo and the fight loses its arc. With them, each defensive pass has its own shape, and the re-engage becomes the moment the player has to re-read what just happened.</p>
-        <p>The break-away tree runs as a sub-tree under the defensive logic, gated by the exchange's duration and the boss's current state. Long enough exchange, low enough stamina, right velocity profile from the player — the break-away fires and the fight breathes for half a second before the next trade. The pacing reset isn't retreat; it's how you keep a fast loop from feeling like a single-note sustain.</p>
+        <p>Inside an extended defensive exchange, the boss occasionally breaks momentum and creates space — backward dash, jump-back, <span class="dm-code">QuickFarRangeDash</span> — then re-engages on a new angle. These aren't escapes. They're rhythm resets. Without them, every defensive pass settles into the same tempo. With them, each pass has its own shape, and the re-engage becomes the moment the player has to re-read what just happened.</p>
+        <p>The break-away sub-tree runs under the defensive logic, gated by exchange duration and the boss's state. Long enough exchange, low stamina, right player velocity — the break-away fires and the fight breathes for half a second before the next trade. The reset isn't retreat; it's how a fast loop avoids feeling like a single-note sustain.</p>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Defensive Break Away Tree.png" alt="BT_Arelius_DefensiveTree break-away sub-tree handling backward dashes, jump-backs, and re-engage angles" onclick="openLightbox(this.src)" />
           <div class="dm-figcaption">Break-Away sub-tree — distance creation &amp; re-engage routing</div>
@@ -1872,8 +1920,8 @@
       <div class="dm-section">
         <div class="dm-section-label">Tree Transitions</div>
         <h4>Handing Off the Fight</h4>
-        <p>The offensive and defensive trees run in parallel, but execution is always in one at a time. The handoff is player-driven: a successful parry, a clean hit landed on the boss, or an action that breaks the boss's current attack flips the <span class="dm-code">AISubAction</span> key and the defensive tree takes priority mid-evaluation. The boss doesn't wait for its current combo to finish recovering — it answers while the player's input is still live.</p>
-        <p>The design consequence is that the player always feels like their action caused the transition. Nothing is on a cooldown timer; nothing waits for an animation to play out before responding. Hit lands → defensive tree picks up with the right context → counter or parry fires on the correct frame. The fight never stalls because the handoff is the player's input, not the AI's decision.</p>
+        <p>Offensive and defensive trees run in parallel, but execution is always in one at a time. The handoff is player-driven: a parry, a clean hit, or an action that breaks the boss's current attack flips the <span class="dm-code">AISubAction</span> key and the defensive tree takes priority mid-evaluation. The boss doesn't wait for its combo to finish recovering — it answers while the player's input is still live.</p>
+        <p>The player always feels like their action caused the transition. Nothing waits on a cooldown; nothing waits for an animation to finish. Hit lands → defensive tree picks up → counter or parry fires on the correct frame. The fight never stalls because the handoff is the player's input, not the AI's decision.</p>
       </div>
     </div>
   </div>
