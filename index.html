@@ -883,6 +883,211 @@
       color: var(--cyan);
     }
 
+    /* ── TOG Horizontal Accordion Stack ─────────────────────────── */
+    .stack-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .stack-eyebrow::before {
+      content: '';
+      width: 22px;
+      height: 1px;
+      background: var(--amber);
+      display: inline-block;
+    }
+    .stack-hint {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+      letter-spacing: 0.04em;
+    }
+    .stack-hint span { color: var(--cyan); }
+
+    .tog-stack {
+      display: flex;
+      width: 100%;
+      height: 640px;
+      gap: 6px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .tog-panel {
+      flex: 1 1 0;
+      min-width: 64px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      background: var(--surface-2, #111420);
+      transition: flex-grow 720ms cubic-bezier(.7,0,.18,1),
+                  background 360ms ease;
+      display: flex;
+      flex-direction: row;
+    }
+    .tog-panel:hover:not(.is-active) {
+      background: rgba(22,26,40,0.7);
+    }
+    .tog-panel.is-active {
+      flex-grow: 14;
+      cursor: default;
+      background: var(--surface);
+    }
+
+    .tog-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      opacity: 0.4;
+      transition: opacity 0.4s, background 0.4s;
+      z-index: 2;
+    }
+    .tog-panel.is-active::before {
+      opacity: 1;
+      background: linear-gradient(90deg, var(--amber), var(--cyan), transparent);
+    }
+
+    .panel-spine {
+      width: 64px;
+      flex-shrink: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 0;
+      border-right: 1px solid var(--border);
+      transition: border-color 0.4s;
+    }
+    .tog-panel.is-active .panel-spine {
+      border-right-color: rgba(46,184,204,0.22);
+    }
+
+    .spine-num {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--cyan);
+      letter-spacing: 0.06em;
+    }
+    .tog-panel.is-active .spine-num { color: var(--amber-bright); }
+
+    .spine-label {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-bright);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+    }
+    .tog-panel.is-active .spine-label { color: var(--white); }
+
+    .spine-glyph {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      letter-spacing: 0.16em;
+    }
+    .tog-panel.is-active .spine-glyph { color: var(--amber); }
+
+    .panel-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 360ms ease 200ms;
+    }
+    .tog-panel.is-active .panel-body { opacity: 1; }
+
+    .panel-head {
+      padding: 1.6rem 2rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.4rem;
+    }
+    .panel-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.9rem;
+      color: var(--white);
+      text-transform: uppercase;
+      line-height: 1.05;
+      letter-spacing: 0.01em;
+    }
+    .panel-tagline {
+      margin-top: 0.5rem;
+      font-size: 0.86rem;
+      color: var(--muted);
+      max-width: 720px;
+      line-height: 1.6;
+    }
+
+    .panel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.4rem 2rem 1.8rem;
+    }
+    .panel-content::-webkit-scrollbar { width: 6px; }
+    .panel-content::-webkit-scrollbar-track { background: transparent; }
+    .panel-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* Trim margin-bottom on grids when inside a panel */
+    .panel-content .decisions-grid,
+    .panel-content .systems-grid {
+      margin-bottom: 0;
+    }
+    .panel-content .ai-stats-row { margin-top: 0; }
+    .panel-content .bt-tree:last-child { margin-bottom: 0; }
+
+    @media (max-width: 880px) {
+      .tog-stack {
+        flex-direction: column;
+        height: auto;
+      }
+      .tog-panel {
+        flex: 0 0 auto;
+        min-height: 64px;
+        flex-direction: column;
+      }
+      .tog-panel.is-active { flex: 0 0 auto; min-height: 560px; }
+      .panel-spine {
+        flex-direction: row;
+        width: 100%;
+        height: 64px;
+        padding: 0 1.4rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .spine-label, .spine-glyph {
+        writing-mode: horizontal-tb;
+        transform: none;
+      }
+    }
+
     /* ── Equation Block ─────────────────────────────────────────── */
     .eq-block {
       background: rgba(46,184,204,0.04);
@@ -1363,146 +1568,204 @@
       </p>
     </div>
 
-    <!-- Design Decisions -->
-    <div class="decisions-eyebrow fade-up">Design Decisions — The Reasoning Behind the Build</div>
-    <div class="decisions-grid fade-up">
-      <div class="decision-card">
-        <div class="dec-num">Decision 01</div>
-        <div class="dec-name">Per-Attack Data Structs Over Baked Blueprint Logic</div>
-        <p class="decision-brief">Each boss attack bundles its animation, movement curves, starting position, and play-rate scaling into one data struct. Tuning became a single field change; adding a new attack meant filling out a struct, not touching logic.</p>
-        <button class="dec-cta" onclick="openDecisionModal('modal-d01')">Design Analysis <span class="dec-cta-arrow">→</span></button>
-      </div>
-      <div class="decision-card">
-        <div class="dec-num">Decision 02</div>
-        <div class="dec-name">Two Parallel Trees: Reactive and Probabilistic</div>
-        <p class="decision-brief">Proactive attack selection and reactive countering competed when sharing one tree. Splitting into two parallel trees gave each its own priority — one phase-gated, one reading live player state.</p>
-        <button class="dec-cta" onclick="openDecisionModal('modal-d02')">Design Analysis <span class="dec-cta-arrow">→</span></button>
-      </div>
-      <div class="decision-card">
-        <div class="dec-num">Decision 03</div>
-        <div class="dec-name">Each Attack as a Layered Combat Puzzle</div>
-        <p class="decision-brief">Attacks that just deal damage turn fights into memorization. Every attack in TOG imposes a constraint on position, timing, and mechanic choice — and resolves into a specific opening as the reward for reading it correctly.</p>
-        <button class="dec-cta" onclick="openDecisionModal('modal-d03')">Design Analysis <span class="dec-cta-arrow">→</span></button>
-      </div>
-      <div class="decision-card">
-        <div class="dec-num">Decision 04</div>
-        <div class="dec-name">The Defensive Tree as the Climax</div>
-        <p class="decision-brief">Most boss fights peak at the attack pattern. TOG treats the defensive exchange as the fastest-paced moment of the fight — where both fighters read each other in real time — and routes every other system toward it.</p>
-        <button class="dec-cta" onclick="openDecisionModal('modal-d04')">Design Analysis <span class="dec-cta-arrow">→</span></button>
-      </div>
-    </div>
+    <!-- ── Project Breakdown — Horizontal Stack ──────────────────── -->
+    <div class="stack-eyebrow fade-up">Project Breakdown</div>
+    <div class="stack-hint fade-up">click a panel to expand <span>↓</span></div>
 
-    <!-- Systems -->
-    <div class="systems-label fade-up">Core Systems</div>
-    <div class="systems-sub fade-up">Modular and data-driven for rapid iteration and scaling.</div>
-    <div class="systems-grid fade-up">
-      <div class="system-card">
-        <span class="sys-icon">⚡</span>
-        <h4>Combo System</h4>
-        <p>Chained light and heavy attack sequences with movement-adaptive inputs and
-           weapon-specific behaviour trees. Designed for expressive chaining without
-           sacrificing readability.</p>
-      </div>
-      <div class="system-card">
-        <span class="sys-icon">🛡</span>
-        <h4>Deflection System</h4>
-        <p>Frame-precise deflection windows trigger QTE-driven counter sequences and
-           finisher states. Rewards skilled play with spectacular visual payoff.</p>
-      </div>
-      <div class="system-card">
-        <span class="sys-icon">🔄</span>
-        <h4>Stat &amp; State System</h4>
-        <p>Data-driven attribute tables govern hit reactions, stagger thresholds, and
-           stamina gating — all exposed via data assets for tuning without recompiling.</p>
-      </div>
-      <div class="system-card">
-        <span class="sys-icon">🏃</span>
-        <h4>Locomotion System</h4>
-        <p>8-directional state machine driven by speed, angle, and weapon stance. Covers
-           guard strafe, aim locomotion, and multi-tier landings — blended with orientation
-           warping and procedural foot IK.</p>
-      </div>
-    </div>
+    <div class="tog-stack fade-up" id="tog-stack">
 
-    <!-- Boss AI Architecture -->
-    <div class="decisions-eyebrow fade-up" style="margin-top:2.8rem;">Boss AI Architecture — Arelius</div>
-
-    <div class="ai-stats-row fade-up">
-      <div class="ai-stat">
-        <span class="ai-stat-num">100+</span>
-        <span class="ai-stat-label">Named Attacks</span>
-      </div>
-      <div class="ai-stat">
-        <span class="ai-stat-num">2</span>
-        <span class="ai-stat-label">Fight Phases</span>
-      </div>
-      <div class="ai-stat">
-        <span class="ai-stat-num">8</span>
-        <span class="ai-stat-label">Custom Decorators</span>
-      </div>
-      <div class="ai-stat">
-        <span class="ai-stat-num">9</span>
-        <span class="ai-stat-label">Custom Tasks</span>
-      </div>
-      <div class="ai-stat">
-        <span class="ai-stat-num">2</span>
-        <span class="ai-stat-label">Parallel Trees</span>
-      </div>
-    </div>
-
-    <div class="bt-tree fade-up">
-      <div class="bt-label">// Behavior Tree Hierarchy</div>
-      <div class="bt-row"><span class="bt-connector">▸</span><span class="bt-node"><span class="bt-key">BT_Arelius</span> <span class="bt-comment">— root selector</span></span></div>
-      <div class="bt-row bt-indent"><span class="bt-connector">├─</span><span class="bt-node">BT_PassiveState</span></div>
-      <div class="bt-row bt-indent"><span class="bt-connector">└─</span><span class="bt-node"><span class="bt-key">BT_Arelius_Combat</span> <span class="bt-comment">— phase-gated via BTD_CheckPhase</span></span></div>
-      <div class="bt-row bt-indent-2"><span class="bt-connector">├─</span><span class="bt-node"><span class="bt-key">BT_Combat_Phase1</span> <span class="bt-comment">— melee combos, lunges, counters, gap-closers</span></span></div>
-      <div class="bt-row bt-indent-2"><span class="bt-connector">└─</span><span class="bt-node"><span class="bt-key">BT_Combat_Phase2</span> <span class="bt-comment">— adds teleport attacks, projectile slashes, vanish</span></span></div>
-      <div style="margin-top:0.9rem;"></div>
-      <div class="bt-row"><span class="bt-connector">▸</span><span class="bt-node"><span class="bt-key">BT_Arelius_DefensiveTree</span> <span class="bt-comment">— reactive, reads player AISubAction &amp; AIReactionSubAction</span></span></div>
-    </div>
-
-    <div class="ai-tags fade-up">
-      <div class="ai-tag-group">
-        <div class="ai-tag-title">Custom Decorators</div>
-        <div class="ai-tag-list">
-          <button class="ai-tag" onclick="openAIDoc('BTD_CheckPhase')">BTD_CheckPhase</button>
-          <button class="ai-tag" onclick="openAIDoc('BTD_InRange')">BTD_InRange</button>
-          <button class="ai-tag" onclick="openAIDoc('BTD_InIdealRange')">BTD_InIdealRange</button>
-          <button class="ai-tag" onclick="openAIDoc('BTD_PlayerVelocityWithinDesiredValues')">BTD_PlayerVelocityWithinDesiredValues</button>
-          <button class="ai-tag" onclick="openAIDoc('BTD_FollowUpChance')">BTD_FollowUpChance</button>
-          <button class="ai-tag" onclick="openAIDoc('BTD_CheckAttackParameters')">BTD_CheckAttackParameters</button>
-          <button class="ai-tag" onclick="openAIDoc('BTD_CheckIfAttackTargetNull')">BTD_CheckIfAttackTargetNull</button>
-          <button class="ai-tag" onclick="openAIDoc('BTD_IsWeaponEquipped')">BTD_IsWeaponEquipped</button>
+      <!-- Panel 01 — Design Pillars (default open) -->
+      <div class="tog-panel is-active" data-panel="01">
+        <div class="panel-spine" onclick="togExpand(this)">
+          <div class="spine-num">01</div>
+          <div class="spine-label">Design Pillars</div>
+          <div class="spine-glyph">+</div>
+        </div>
+        <div class="panel-body">
+          <div class="panel-head">
+            <div class="panel-eyebrow">// 01 — Design Philosophy</div>
+            <div class="panel-title">Design Pillars</div>
+            <p class="panel-tagline">The two convictions every other system in this project answers to. Click a pillar for the full reasoning.</p>
+          </div>
+          <div class="panel-content">
+            <div class="decisions-grid">
+              <div class="decision-card">
+                <div class="dec-num">Pillar 01</div>
+                <div class="dec-name">Each Attack as a Layered Combat Puzzle</div>
+                <p class="decision-brief">Attacks that just deal damage turn fights into memorization. Every attack in TOG imposes a constraint on position, timing, and mechanic choice — and resolves into a specific opening as the reward for reading it correctly.</p>
+                <button class="dec-cta" onclick="openDecisionModal('modal-d03')">Design Analysis <span class="dec-cta-arrow">→</span></button>
+              </div>
+              <div class="decision-card">
+                <div class="dec-num">Pillar 02</div>
+                <div class="dec-name">The Defensive Tree as the Climax</div>
+                <p class="decision-brief">Most boss fights peak at the attack pattern. TOG treats the defensive exchange as the fastest-paced moment of the fight — where both fighters read each other in real time — and routes every other system toward it.</p>
+                <button class="dec-cta" onclick="openDecisionModal('modal-d04')">Design Analysis <span class="dec-cta-arrow">→</span></button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="ai-tag-group">
-        <div class="ai-tag-title">Custom Tasks</div>
-        <div class="ai-tag-list">
-          <button class="ai-tag" onclick="openAIDoc('BTT_Attacks')">BTT_Attacks</button>
-          <button class="ai-tag" onclick="openAIDoc('BTT_Dash')">BTT_Dash</button>
-          <button class="ai-tag" onclick="openAIDoc('BTT_Strafe')">BTT_Strafe</button>
-          <button class="ai-tag" onclick="openAIDoc('BTT_MoveToTarget')">BTT_MoveToTarget</button>
-          <button class="ai-tag" onclick="openAIDoc('BTT_SetMovementMode')">BTT_SetMovementMode</button>
-          <button class="ai-tag" onclick="openAIDoc('BTT_EquipWeapon')">BTT_EquipWeapon</button>
-          <button class="ai-tag" onclick="openAIDoc('BTT_UnequipWeapon')">BTT_UnequipWeapon</button>
-          <button class="ai-tag" onclick="openAIDoc('BTT_FocusTarget')">BTT_FocusTarget</button>
-          <button class="ai-tag" onclick="openAIDoc('BTT_HitReaction')">BTT_HitReaction</button>
+
+      <!-- Panel 02 — Core Systems -->
+      <div class="tog-panel" data-panel="02">
+        <div class="panel-spine" onclick="togExpand(this)">
+          <div class="spine-num">02</div>
+          <div class="spine-label">Core Systems</div>
+          <div class="spine-glyph">+</div>
+        </div>
+        <div class="panel-body">
+          <div class="panel-head">
+            <div class="panel-eyebrow">// 02 — Modular Foundations</div>
+            <div class="panel-title">Core Systems</div>
+            <p class="panel-tagline">Modular and data-driven for rapid iteration and scaling — every system exposes its tunables as data assets.</p>
+          </div>
+          <div class="panel-content">
+            <div class="systems-grid">
+              <div class="system-card">
+                <span class="sys-icon">⚡</span>
+                <h4>Combo System</h4>
+                <p>Chained light and heavy attack sequences with movement-adaptive inputs and
+                   weapon-specific behaviour trees. Designed for expressive chaining without
+                   sacrificing readability.</p>
+              </div>
+              <div class="system-card">
+                <span class="sys-icon">🛡</span>
+                <h4>Deflection System</h4>
+                <p>Frame-precise deflection windows trigger QTE-driven counter sequences and
+                   finisher states. Rewards skilled play with spectacular visual payoff.</p>
+              </div>
+              <div class="system-card">
+                <span class="sys-icon">🔄</span>
+                <h4>Stat &amp; State System</h4>
+                <p>Data-driven attribute tables govern hit reactions, stagger thresholds, and
+                   stamina gating — all exposed via data assets for tuning without recompiling.</p>
+              </div>
+              <div class="system-card">
+                <span class="sys-icon">🏃</span>
+                <h4>Locomotion System</h4>
+                <p>8-directional state machine driven by speed, angle, and weapon stance. Covers
+                   guard strafe, aim locomotion, and multi-tier landings — blended with orientation
+                   warping and procedural foot IK.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="bt-tree fade-up" style="margin-top:1.2rem;">
-      <div class="bt-label">// Dynamic Runtime Behavior</div>
-      <p style="margin:0 0 1rem; font-size:0.88rem; line-height:1.7; color:var(--text);">
-        Each attack carries per-action weighted probabilities stored in a custom
-        data struct (<em>F_DiscreetActionWeightedChances</em>) and queried live at
-        every BT decision point. Two dedicated decorators —
-        <em>BTD_AttackSequenceChance</em> and <em>BTD_FollowUpChance</em> — roll
-        against these weights before committing to any chain or follow-up. The boss
-        resists memorization without feeling random: unpredictability is structured,
-        not noise.
-      </p>
-      <button class="dec-cta" onclick="openDecisionModal('modal-dyn-runtime')">Deep Dive <span class="dec-cta-arrow">→</span></button>
+      <!-- Panel 03 — Boss AI Architecture -->
+      <div class="tog-panel" data-panel="03">
+        <div class="panel-spine" onclick="togExpand(this)">
+          <div class="spine-num">03</div>
+          <div class="spine-label">Boss AI — Arelius</div>
+          <div class="spine-glyph">+</div>
+        </div>
+        <div class="panel-body">
+          <div class="panel-head">
+            <div class="panel-eyebrow">// 03 — Behavior Tree Architecture</div>
+            <div class="panel-title">Boss AI — Arelius</div>
+            <p class="panel-tagline">Two parallel behavior trees, phase-gated combat, and a defensive tree that reads live player state. Click any decorator or task for its function reference.</p>
+          </div>
+          <div class="panel-content">
+
+            <div class="ai-stats-row">
+              <div class="ai-stat">
+                <span class="ai-stat-num">100+</span>
+                <span class="ai-stat-label">Named Attacks</span>
+              </div>
+              <div class="ai-stat">
+                <span class="ai-stat-num">2</span>
+                <span class="ai-stat-label">Fight Phases</span>
+              </div>
+              <div class="ai-stat">
+                <span class="ai-stat-num">8</span>
+                <span class="ai-stat-label">Custom Decorators</span>
+              </div>
+              <div class="ai-stat">
+                <span class="ai-stat-num">9</span>
+                <span class="ai-stat-label">Custom Tasks</span>
+              </div>
+              <div class="ai-stat">
+                <span class="ai-stat-num">2</span>
+                <span class="ai-stat-label">Parallel Trees</span>
+              </div>
+            </div>
+
+            <div class="bt-tree">
+              <div class="bt-label">// Behavior Tree Hierarchy</div>
+              <div class="bt-row"><span class="bt-connector">▸</span><span class="bt-node"><span class="bt-key">BT_Arelius</span> <span class="bt-comment">— root selector</span></span></div>
+              <div class="bt-row bt-indent"><span class="bt-connector">├─</span><span class="bt-node">BT_PassiveState</span></div>
+              <div class="bt-row bt-indent"><span class="bt-connector">└─</span><span class="bt-node"><span class="bt-key">BT_Arelius_Combat</span> <span class="bt-comment">— phase-gated via BTD_CheckPhase</span></span></div>
+              <div class="bt-row bt-indent-2"><span class="bt-connector">├─</span><span class="bt-node"><span class="bt-key">BT_Combat_Phase1</span> <span class="bt-comment">— melee combos, lunges, counters, gap-closers</span></span></div>
+              <div class="bt-row bt-indent-2"><span class="bt-connector">└─</span><span class="bt-node"><span class="bt-key">BT_Combat_Phase2</span> <span class="bt-comment">— adds teleport attacks, projectile slashes, vanish</span></span></div>
+              <div style="margin-top:0.9rem;"></div>
+              <div class="bt-row"><span class="bt-connector">▸</span><span class="bt-node"><span class="bt-key">BT_Arelius_DefensiveTree</span> <span class="bt-comment">— reactive, reads player AISubAction &amp; AIReactionSubAction</span></span></div>
+            </div>
+
+            <div class="ai-tags">
+              <div class="ai-tag-group">
+                <div class="ai-tag-title">Custom Decorators</div>
+                <div class="ai-tag-list">
+                  <button class="ai-tag" onclick="openAIDoc('BTD_CheckPhase')">BTD_CheckPhase</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTD_InRange')">BTD_InRange</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTD_InIdealRange')">BTD_InIdealRange</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTD_PlayerVelocityWithinDesiredValues')">BTD_PlayerVelocityWithinDesiredValues</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTD_FollowUpChance')">BTD_FollowUpChance</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTD_CheckAttackParameters')">BTD_CheckAttackParameters</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTD_CheckIfAttackTargetNull')">BTD_CheckIfAttackTargetNull</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTD_IsWeaponEquipped')">BTD_IsWeaponEquipped</button>
+                </div>
+              </div>
+              <div class="ai-tag-group">
+                <div class="ai-tag-title">Custom Tasks</div>
+                <div class="ai-tag-list">
+                  <button class="ai-tag" onclick="openAIDoc('BTT_Attacks')">BTT_Attacks</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTT_Dash')">BTT_Dash</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTT_Strafe')">BTT_Strafe</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTT_MoveToTarget')">BTT_MoveToTarget</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTT_SetMovementMode')">BTT_SetMovementMode</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTT_EquipWeapon')">BTT_EquipWeapon</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTT_UnequipWeapon')">BTT_UnequipWeapon</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTT_FocusTarget')">BTT_FocusTarget</button>
+                  <button class="ai-tag" onclick="openAIDoc('BTT_HitReaction')">BTT_HitReaction</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 04 — Dynamic Runtime -->
+      <div class="tog-panel" data-panel="04">
+        <div class="panel-spine" onclick="togExpand(this)">
+          <div class="spine-num">04</div>
+          <div class="spine-label">Dynamic Runtime</div>
+          <div class="spine-glyph">+</div>
+        </div>
+        <div class="panel-body">
+          <div class="panel-head">
+            <div class="panel-eyebrow">// 04 — Probability Architecture</div>
+            <div class="panel-title">Dynamic Runtime Behavior</div>
+            <p class="panel-tagline">Structured unpredictability — the boss resists memorization without feeling random.</p>
+          </div>
+          <div class="panel-content">
+            <div class="bt-tree" style="margin-bottom:1.2rem;">
+              <div class="bt-label">// How It Works</div>
+              <p style="margin:0 0 1rem; font-size:0.88rem; line-height:1.7; color:var(--text);">
+                Each attack carries per-action weighted probabilities stored in a custom
+                data struct (<em>F_DiscreetActionWeightedChances</em>) and queried live at
+                every BT decision point. Two dedicated decorators —
+                <em>BTD_AttackSequenceChance</em> and <em>BTD_FollowUpChance</em> — roll
+                against these weights before committing to any chain or follow-up. The boss
+                resists memorization without feeling random: unpredictability is structured,
+                not noise.
+              </p>
+              <button class="dec-cta" onclick="openDecisionModal('modal-dyn-runtime')">Deep Dive <span class="dec-cta-arrow">→</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </section>
@@ -2072,6 +2335,14 @@
     document.getElementById('modal-ai-doc').addEventListener('click', function(e) {
       if (e.target === this) closeAIDoc();
     });
+
+    /* ── TOG Horizontal Stack ── */
+    function togExpand(spineEl) {
+      const panel = spineEl.closest('.tog-panel');
+      if (!panel || panel.classList.contains('is-active')) return;
+      document.querySelectorAll('#tog-stack .tog-panel').forEach(p => p.classList.remove('is-active'));
+      panel.classList.add('is-active');
+    }
   </script>
 
   <!-- ── Dynamic Runtime Behavior Modal ──────────────────────────── -->
