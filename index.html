@@ -572,7 +572,7 @@
 
     .decisions-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       margin-bottom: 2.5rem;
     }
@@ -1624,7 +1624,7 @@
       <div class="toc-item" onclick="togOpen('01')">
         <div class="toc-num">// 01</div>
         <div class="toc-name">Design Pillars</div>
-        <p>The two design convictions every other system in TOG answers to.</p>
+        <p>The three design pillars every other system in TOG answers to.</p>
       </div>
       <div class="toc-item" onclick="togOpen('02')">
         <div class="toc-num">// 02</div>
@@ -1656,7 +1656,7 @@
           <div class="panel-head">
             <div class="panel-eyebrow">// 01 — Design Philosophy</div>
             <div class="panel-title">Design Pillars</div>
-            <p class="panel-tagline">Inside: the two design convictions — Layered Combat Puzzle and Defensive Tree as Climax — each linked to a full design analysis modal.</p>
+            <p class="panel-tagline">Inside: the three design pillars — Combat Puzzle, Pacing &amp; Escalating Tension, and Reactive Boss AI — each linked to a full design analysis modal.</p>
           </div>
           <div class="panel-content">
             <div class="decisions-grid">
@@ -1668,9 +1668,15 @@
               </div>
               <div class="decision-card">
                 <div class="dec-num">Pillar 02</div>
-                <div class="dec-name">The Defensive Tree as the Climax</div>
-                <p class="decision-brief">Most boss fights peak at the attack pattern. TOG treats the defensive exchange as the fastest-paced moment of the fight — where both fighters read each other in real time — and routes every other system toward it.</p>
+                <div class="dec-name">Pacing &amp; Escalating Tension</div>
+                <p class="decision-brief">Pace is the design variable. Tension escalates through rhythm shifts, phase-gated tool reveals, and AI behavioral pivots — and the defensive exchange is the climax tactic, where both fighters read each other in real time at the fastest pace in the fight.</p>
                 <button class="dec-cta" onclick="openDecisionModal('modal-d04')">Design Analysis <span class="dec-cta-arrow">→</span></button>
+              </div>
+              <div class="decision-card">
+                <div class="dec-num">Pillar 03</div>
+                <div class="dec-name">Reactive Boss AI</div>
+                <p class="decision-brief">A boss with a fixed attack pool is a memorization test. Arelius reads the player — approach velocity, quadrant, prior actions, reaction state — and picks his next move from that read. Probabilistic follow-ups keep the same exchange from resolving the same way twice.</p>
+                <button class="dec-cta" onclick="openDecisionModal('modal-d02')">Design Analysis <span class="dec-cta-arrow">→</span></button>
               </div>
             </div>
           </div>
@@ -2279,7 +2285,7 @@
       <div class="dm-section">
         <div class="dm-section-label">Pacing &amp; Flow State</div>
         <h4>Designing the Entry and the Exit</h4>
-        <p>Flow state is the moment the player stops deliberating and starts reading — when reaction becomes intuition and the fight feels like rhythm. Every attack builds toward this: telegraphed paths (golden threads lighting the weapon before a swing) create the foundation; mix-ups and phase transitions break it deliberately. The question isn't whether the player enters flow — it's how fast they get there and what it feels like to be knocked out.</p>
+        <p>Flow state is the moment the player stops deliberating and starts reading — when reaction becomes intuition and the fight feels like rhythm. Every attack builds toward this: each montage's startup is a learnable signature, distinct enough to recognize and consistent enough to internalize; mix-ups and phase transitions break the read deliberately. The question isn't whether the player enters flow — it's how fast they get there and what it feels like to be knocked out.</p>
         <p>Phase 1 builds the model. Arelius stays grounded, melee-range, learnable. Phase 2 introduces <span class="dm-code">ThrowSwordTeleport</span> and <span class="dm-code">VanishingStep</span> — the spatial model breaks, flow is disrupted. The reset: remove what the player was relying on, then give them space to rebuild. The design question isn't "is this fair" — it's "how long until they find their footing, and does getting there feel earned?"</p>
       </div>
     </div>
@@ -2290,11 +2296,11 @@
     <div class="decision-modal">
       <button class="dm-close" onclick="closeDecisionModal('modal-d04')">&times;</button>
       <div class="dm-eyebrow">Decision 04</div>
-      <div class="dm-title">The Defensive Tree<br/>as the Climax</div>
+      <div class="dm-title">Pacing &amp;<br/>Escalating Tension</div>
 
       <div class="dm-tldr">
         <span class="dm-tldr-tag">Goal</span>
-        <span class="dm-tldr-text">The defensive exchange is the fight's peak — every other AI system hands off into it.</span>
+        <span class="dm-tldr-text">Pace is the design variable. Every AI system feeds tension toward the defensive exchange — the climax tactic, where both fighters read each other at the fight's fastest pace.</span>
       </div>
 
       <div class="dm-section">
