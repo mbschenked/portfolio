@@ -30,7 +30,7 @@
       --muted:       #535870;
       --white:       #edf0f8;
       --radius:      10px;
-      --max:         1100px;
+      --max:         1280px;
       --font-display:'Barlow Condensed', sans-serif;
       --font-mono:   'JetBrains Mono', monospace;
       --font-body:   'DM Sans', sans-serif;
@@ -911,10 +911,58 @@
     }
     .stack-hint span { color: var(--cyan); }
 
+    /* TOC strip above the stack */
+    .stack-toc {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 1.4rem;
+      background: var(--surface);
+    }
+    .toc-item {
+      padding: 1rem 1.2rem 1.1rem;
+      border-right: 1px solid var(--border);
+      transition: background 0.22s;
+      cursor: pointer;
+    }
+    .toc-item:last-child { border-right: none; }
+    .toc-item:hover { background: var(--surface-2, #111420); }
+    .toc-num {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: var(--cyan);
+      margin-bottom: 0.45rem;
+    }
+    .toc-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.45rem;
+      line-height: 1.15;
+    }
+    .toc-item p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    @media (max-width: 880px) {
+      .stack-toc { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 540px) {
+      .stack-toc { grid-template-columns: 1fr; }
+    }
+
     .tog-stack {
       display: flex;
       width: 100%;
-      height: 640px;
+      height: 896px;
       gap: 6px;
       border-radius: 10px;
       overflow: hidden;
@@ -1570,7 +1618,30 @@
 
     <!-- ── Project Breakdown — Horizontal Stack ──────────────────── -->
     <div class="stack-eyebrow fade-up">Project Breakdown</div>
-    <div class="stack-hint fade-up">click a panel to expand <span>↓</span></div>
+    <div class="stack-hint fade-up">a quick map of what's inside — click a panel to dive in <span>↓</span></div>
+
+    <div class="stack-toc fade-up">
+      <div class="toc-item" onclick="togOpen('01')">
+        <div class="toc-num">// 01</div>
+        <div class="toc-name">Design Pillars</div>
+        <p>The two design convictions every other system in TOG answers to.</p>
+      </div>
+      <div class="toc-item" onclick="togOpen('02')">
+        <div class="toc-num">// 02</div>
+        <div class="toc-name">Core Systems</div>
+        <p>Combo, deflection, stat &amp; state, and locomotion — the foundations underneath every encounter.</p>
+      </div>
+      <div class="toc-item" onclick="togOpen('03')">
+        <div class="toc-num">// 03</div>
+        <div class="toc-name">Boss AI — Arelius</div>
+        <p>Behavior tree hierarchy, phase-gated combat, and the full custom decorator + task library.</p>
+      </div>
+      <div class="toc-item" onclick="togOpen('04')">
+        <div class="toc-num">// 04</div>
+        <div class="toc-name">Dynamic AI Runtime</div>
+        <p>Probability system that shifts the boss's attack distribution in response to player results.</p>
+      </div>
+    </div>
 
     <div class="tog-stack fade-up" id="tog-stack">
 
@@ -1585,7 +1656,7 @@
           <div class="panel-head">
             <div class="panel-eyebrow">// 01 — Design Philosophy</div>
             <div class="panel-title">Design Pillars</div>
-            <p class="panel-tagline">The two convictions every other system in this project answers to. Click a pillar for the full reasoning.</p>
+            <p class="panel-tagline">Inside: the two design convictions — Layered Combat Puzzle and Defensive Tree as Climax — each linked to a full design analysis modal.</p>
           </div>
           <div class="panel-content">
             <div class="decisions-grid">
@@ -1617,7 +1688,7 @@
           <div class="panel-head">
             <div class="panel-eyebrow">// 02 — Modular Foundations</div>
             <div class="panel-title">Core Systems</div>
-            <p class="panel-tagline">Modular and data-driven for rapid iteration and scaling — every system exposes its tunables as data assets.</p>
+            <p class="panel-tagline">Inside: the four foundational systems running underneath every encounter — Combo, Deflection, Stat &amp; State, and Locomotion. Each is modular, data-driven, and tunable without recompiling.</p>
           </div>
           <div class="panel-content">
             <div class="systems-grid">
@@ -1663,7 +1734,7 @@
           <div class="panel-head">
             <div class="panel-eyebrow">// 03 — Behavior Tree Architecture</div>
             <div class="panel-title">Boss AI — Arelius</div>
-            <p class="panel-tagline">Two parallel behavior trees, phase-gated combat, and a defensive tree that reads live player state. Click any decorator or task for its function reference.</p>
+            <p class="panel-tagline">Inside: the boss's behavior tree hierarchy (BT_Arelius and its phase-gated sub-trees), at-a-glance scale stats, and the full custom function library — decorators, tasks, anim notifies, and notify events. Click any tag for its function reference.</p>
           </div>
           <div class="panel-content">
 
@@ -1678,11 +1749,19 @@
               </div>
               <div class="ai-stat">
                 <span class="ai-stat-num">8</span>
-                <span class="ai-stat-label">Custom Decorators</span>
+                <span class="ai-stat-label">Decorators</span>
               </div>
               <div class="ai-stat">
                 <span class="ai-stat-num">9</span>
-                <span class="ai-stat-label">Custom Tasks</span>
+                <span class="ai-stat-label">Tasks</span>
+              </div>
+              <div class="ai-stat">
+                <span class="ai-stat-num">9</span>
+                <span class="ai-stat-label">Anim Notifies</span>
+              </div>
+              <div class="ai-stat">
+                <span class="ai-stat-num">11</span>
+                <span class="ai-stat-label">Notify Events</span>
               </div>
               <div class="ai-stat">
                 <span class="ai-stat-num">2</span>
@@ -1729,39 +1808,139 @@
                   <button class="ai-tag" onclick="openAIDoc('BTT_HitReaction')">BTT_HitReaction</button>
                 </div>
               </div>
+              <div class="ai-tag-group">
+                <div class="ai-tag-title">Custom Anim Notifies</div>
+                <div class="ai-tag-list">
+                  <button class="ai-tag" onclick="openAIDoc('ANS_SetInterruptibility')">ANS_SetInterruptibility</button>
+                  <button class="ai-tag" onclick="openAIDoc('ANS_SetRespondToPlayerActions')">ANS_SetRespondToPlayerActions</button>
+                  <button class="ai-tag" onclick="openAIDoc('ANS_RotateActorInGivenDirection')">ANS_RotateActorInGivenDirection</button>
+                  <button class="ai-tag" onclick="openAIDoc('ANS_RotateActorAroundPoint')">ANS_RotateActorAroundPoint</button>
+                  <button class="ai-tag" onclick="openAIDoc('ANS_SetAnimPlayRate')">ANS_SetAnimPlayRate</button>
+                  <button class="ai-tag" onclick="openAIDoc('ANS_UpdateAttackTargetLocationToRotateJoints')">ANS_UpdateAttackTargetLocationToRotateJoints</button>
+                  <button class="ai-tag" onclick="openAIDoc('ANS_SpawnMovingEffect')">ANS_SpawnMovingEffect</button>
+                  <button class="ai-tag" onclick="openAIDoc('ANS_SpawnEffectDetachedFromLocation')">ANS_SpawnEffectDetachedFromLocation</button>
+                  <button class="ai-tag" onclick="openAIDoc('ANS_CheckDistance')">ANS_CheckDistance</button>
+                </div>
+              </div>
+              <div class="ai-tag-group">
+                <div class="ai-tag-title">Anim Notify Events</div>
+                <div class="ai-tag-list">
+                  <button class="ai-tag" onclick="openAIDoc('AN_DynamicResponse')">AN_DynamicResponse</button>
+                  <button class="ai-tag" onclick="openAIDoc('AN_FinishAttackBranchOverride')">AN_FinishAttackBranchOverride</button>
+                  <button class="ai-tag" onclick="openAIDoc('AN_StartCounterDeflectWindow')">AN_StartCounterDeflectWindow</button>
+                  <button class="ai-tag" onclick="openAIDoc('AN_UpdateAiReactionKey')">AN_UpdateAiReactionKey</button>
+                  <button class="ai-tag" onclick="openAIDoc('AN_SetActionState')">AN_SetActionState</button>
+                  <button class="ai-tag" onclick="openAIDoc('AN_ResetAttackParameters')">AN_ResetAttackParameters</button>
+                  <button class="ai-tag" onclick="openAIDoc('AN_InitiateTeleportToSword')">AN_InitiateTeleportToSword</button>
+                  <button class="ai-tag" onclick="openAIDoc('AN_MaxDeflectAmountMet')">AN_MaxDeflectAmountMet</button>
+                  <button class="ai-tag" onclick="openAIDoc('AN_UpdateGuardFacingDirection')">AN_UpdateGuardFacingDirection</button>
+                  <button class="ai-tag" onclick="openAIDoc('AN_UpdatePerfectParryCounter')">AN_UpdatePerfectParryCounter</button>
+                  <button class="ai-tag" onclick="openAIDoc('AN_KnockedDown')">AN_KnockedDown</button>
+                </div>
+              </div>
             </div>
 
           </div>
         </div>
       </div>
 
-      <!-- Panel 04 — Dynamic Runtime -->
+      <!-- Panel 04 — Dynamic AI Runtime -->
       <div class="tog-panel" data-panel="04">
         <div class="panel-spine" onclick="togExpand(this)">
           <div class="spine-num">04</div>
-          <div class="spine-label">Dynamic Runtime</div>
+          <div class="spine-label">Dynamic AI Runtime</div>
           <div class="spine-glyph">+</div>
         </div>
         <div class="panel-body">
           <div class="panel-head">
             <div class="panel-eyebrow">// 04 — Probability Architecture</div>
-            <div class="panel-title">Dynamic Runtime Behavior</div>
-            <p class="panel-tagline">Structured unpredictability — the boss resists memorization without feeling random.</p>
+            <div class="panel-title">Dynamic AI Runtime Behavior</div>
+            <p class="panel-tagline">Inside: the selection probability formula, point-accumulation rules, hit/miss/block/parry behaviors, full variable legend, and the design intent behind why this only runs on the combat tree — not the defensive one.</p>
           </div>
           <div class="panel-content">
-            <div class="bt-tree" style="margin-bottom:1.2rem;">
-              <div class="bt-label">// How It Works</div>
-              <p style="margin:0 0 1rem; font-size:0.88rem; line-height:1.7; color:var(--text);">
-                Each attack carries per-action weighted probabilities stored in a custom
-                data struct (<em>F_DiscreetActionWeightedChances</em>) and queried live at
-                every BT decision point. Two dedicated decorators —
-                <em>BTD_AttackSequenceChance</em> and <em>BTD_FollowUpChance</em> — roll
-                against these weights before committing to any chain or follow-up. The boss
-                resists memorization without feeling random: unpredictability is structured,
-                not noise.
-              </p>
-              <button class="dec-cta" onclick="openDecisionModal('modal-dyn-runtime')">Deep Dive <span class="dec-cta-arrow">→</span></button>
+
+            <p style="margin:0 0 1.2rem; font-size:0.92rem; color:var(--text); line-height:1.78;">
+              Attacks and combos are organized into branches within the combat tree.
+              Every time an attack doesn't fire, it accumulates points — pressure building
+              toward inevitability. Selection chance is its current points divided by the
+              branch total: a live probability distribution that shifts across the entire
+              fight based on what actually works against <em>this</em> player.
+            </p>
+
+            <div class="eq-block">
+              <div class="eq-label">// Selection Probability</div>
+              <div class="eq-row">
+                <span class="eq-lhs"><em>P</em>(<em>i</em>)</span>
+                <span class="eq-op">=</span>
+                <span class="eq-fraction">
+                  <span class="eq-num"><em>P<sub>i</sub></em></span>
+                  <span class="eq-den">
+                    <span class="eq-sigma">Σ</span>
+                    <span class="eq-bounds"><sup><em>n</em></sup><sub><em>j</em>=1</sub></span>
+                    <em>P<sub>j</sub></em>
+                  </span>
+                </span>
+              </div>
+
+              <div class="eq-sep"></div>
+              <div class="eq-label">// Point Accumulation (attack <em>i</em> not selected at decision)</div>
+              <div class="eq-row">
+                <em>P<sub>i</sub></em>
+                <span class="eq-op">←</span>
+                <em>P<sub>i</sub></em> + 1 · <em>m<sub>i</sub></em> · <em>w</em>(<em>H<sub>i</sub></em>)
+              </div>
+              <div style="font-size:0.7rem;color:var(--muted);margin-top:0.3rem;">base = 1 &nbsp;·&nbsp; <em>m<sub>i</sub></em> ∈ [0.7, 1.3] &nbsp;·&nbsp; P<sub>i</sub>(init) = 0</div>
+
+              <div class="eq-sep"></div>
+              <div class="eq-label">// On Successful Hit</div>
+              <div class="eq-row"><em>m<sub>i</sub></em> <span class="eq-op">←</span> clamp(<em>m<sub>i</sub></em> + Δ<em>m</em>,&nbsp; 0.7,&nbsp; 1.3)</div>
+              <div class="eq-row"><em>P<sub>i</sub></em> <span class="eq-op">←</span> 0</div>
+
+              <div class="eq-sep"></div>
+              <div class="eq-label">// On Miss or Block</div>
+              <div class="eq-row"><em>m<sub>i</sub></em> <span class="eq-op">←</span> clamp(<em>m<sub>i</sub></em> − Δ<em>m</em>,&nbsp; 0.7,&nbsp; 1.3)</div>
+
+              <div class="eq-sep"></div>
+              <div class="eq-label">// On Perfect Parry</div>
+              <div class="eq-row"><em>m<sub>i</sub></em> <span class="eq-op">unchanged</span></div>
             </div>
+
+            <div class="eq-legend">
+              <div><em>P<sub>i</sub></em> — accumulated points for attack <em>i</em>; initialized at 0, updated only on attack result</div>
+              <div><em>n</em> — total attacks in the branch</div>
+              <div><em>m<sub>i</sub></em> — effectiveness modifier; clamped to [0.7, 1.3]; rises on hit, falls on miss/block, untouched on perfect parry</div>
+              <div><em>w(H<sub>i</sub>)</em> — hit weight; scales points added based on whether the attack would connect</div>
+              <div><em>P<sub>i</sub></em> ← 0 — reset on successful hit; enforces cooldown before the attack can re-accumulate</div>
+            </div>
+
+            <p style="margin-top:1.4rem; font-size:0.92rem; line-height:1.82;">
+              Points only move when an attack result is evaluated — not on a timer.
+              A perfect parry leaves the modifier untouched: the player executed at the
+              highest level, and the system doesn't penalize the boss for it. Blocks and
+              misses pull the modifier down, so attacks that aren't connecting accumulate
+              slower and naturally fall back in the distribution.
+            </p>
+
+            <p style="margin-top:0.9rem; font-size:0.92rem; line-height:1.82;">
+              The system only runs on the combat tree. Narrative attacks — phase openers
+              and crescendo moments that define the fight's emotional arc — are hard-coded
+              to fire reliably. The defensive tree carries no point system at all: those
+              exchanges need to feel like the player is barely surviving, and a weighted
+              distribution would undercut that pressure.
+            </p>
+
+            <p style="margin-top:0.9rem; font-size:0.92rem; line-height:1.82;">
+              Where the system has the most impact is on ranged attacks and gap-closers.
+              As the distribution shifts, the fight's rhythm changes — trading close-quarters
+              pressure for a cat-and-mouse dynamic of weaving through ranged attacks to find
+              an opening on an unguarded enemy. The same boss, a different fight.
+            </p>
+
+            <p style="color:var(--muted); font-family:var(--font-mono); font-size:0.72rem; margin-top:1.6rem; padding-top:1.2rem; border-top:1px solid var(--border);">
+              // System architected in BPC_Attacks_TOG — full implementation
+              scoped for a future build.
+            </p>
+
           </div>
         </div>
       </div>
@@ -2343,89 +2522,13 @@
       document.querySelectorAll('#tog-stack .tog-panel').forEach(p => p.classList.remove('is-active'));
       panel.classList.add('is-active');
     }
+    function togOpen(panelNum) {
+      const panel = document.querySelector(`#tog-stack .tog-panel[data-panel="${panelNum}"]`);
+      if (!panel || panel.classList.contains('is-active')) return;
+      document.querySelectorAll('#tog-stack .tog-panel').forEach(p => p.classList.remove('is-active'));
+      panel.classList.add('is-active');
+    }
   </script>
-
-  <!-- ── Dynamic Runtime Behavior Modal ──────────────────────────── -->
-  <div id="modal-dyn-runtime" class="decision-overlay">
-    <div class="decision-modal">
-      <button class="dm-close" onclick="closeDecisionModal('modal-dyn-runtime')">&times;</button>
-      <div class="dm-eyebrow">Boss AI Architecture — BPC_Attacks_TOG</div>
-      <div class="dm-title">Dynamic Runtime<br/>Behavior</div>
-
-      <p>Attacks and combos are organized into branches within the combat tree.
-         Every time an attack doesn't fire, it accumulates points — pressure building
-         toward inevitability. Selection chance is its current points divided by the
-         branch total: a live probability distribution that shifts across the entire
-         fight based on what actually works against <em>this</em> player.</p>
-
-      <div class="eq-block">
-        <div class="eq-label">// Selection Probability</div>
-        <div class="eq-row">
-          <span class="eq-lhs"><em>P</em>(<em>i</em>)</span>
-          <span class="eq-op">=</span>
-          <span class="eq-fraction">
-            <span class="eq-num"><em>P<sub>i</sub></em></span>
-            <span class="eq-den">
-              <span class="eq-sigma">Σ</span>
-              <span class="eq-bounds"><sup><em>n</em></sup><sub><em>j</em>=1</sub></span>
-              <em>P<sub>j</sub></em>
-            </span>
-          </span>
-        </div>
-
-        <div class="eq-sep"></div>
-        <div class="eq-label">// Point Accumulation (attack <em>i</em> not selected at decision)</div>
-        <div class="eq-row">
-          <em>P<sub>i</sub></em>
-          <span class="eq-op">←</span>
-          <em>P<sub>i</sub></em> + 1 · <em>m<sub>i</sub></em> · <em>w</em>(<em>H<sub>i</sub></em>)
-        </div>
-        <div style="font-size:0.7rem;color:var(--muted);margin-top:0.3rem;">base = 1 &nbsp;·&nbsp; <em>m<sub>i</sub></em> ∈ [0.7, 1.3] &nbsp;·&nbsp; P<sub>i</sub>(init) = 0</div>
-
-        <div class="eq-sep"></div>
-        <div class="eq-label">// On Successful Hit</div>
-        <div class="eq-row"><em>m<sub>i</sub></em> <span class="eq-op">←</span> clamp(<em>m<sub>i</sub></em> + Δ<em>m</em>,&nbsp; 0.7,&nbsp; 1.3)</div>
-        <div class="eq-row"><em>P<sub>i</sub></em> <span class="eq-op">←</span> 0</div>
-
-        <div class="eq-sep"></div>
-        <div class="eq-label">// On Miss or Block</div>
-        <div class="eq-row"><em>m<sub>i</sub></em> <span class="eq-op">←</span> clamp(<em>m<sub>i</sub></em> − Δ<em>m</em>,&nbsp; 0.7,&nbsp; 1.3)</div>
-
-        <div class="eq-sep"></div>
-        <div class="eq-label">// On Perfect Parry</div>
-        <div class="eq-row"><em>m<sub>i</sub></em> <span class="eq-op">unchanged</span></div>
-      </div>
-
-      <div class="eq-legend">
-        <div><em>P<sub>i</sub></em> — accumulated points for attack <em>i</em>; initialized at 0, updated only on attack result</div>
-        <div><em>n</em> — total attacks in the branch</div>
-        <div><em>m<sub>i</sub></em> — effectiveness modifier; clamped to [0.7, 1.3]; rises on hit, falls on miss/block, untouched on perfect parry</div>
-        <div><em>w(H<sub>i</sub>)</em> — hit weight; scales points added based on whether the attack would connect</div>
-        <div><em>P<sub>i</sub></em> ← 0 — reset on successful hit; enforces cooldown before the attack can re-accumulate</div>
-      </div>
-
-      <p style="margin-top:1.4rem;">Points only move when an attack result is evaluated — not on a timer.
-         A perfect parry leaves the modifier untouched: the player executed at the
-         highest level, and the system doesn't penalize the boss for it. Blocks and
-         misses pull the modifier down, so attacks that aren't connecting accumulate
-         slower and naturally fall back in the distribution.</p>
-
-      <p>The system only runs on the combat tree. Narrative attacks — phase openers
-         and crescendo moments that define the fight's emotional arc — are hard-coded
-         to fire reliably. The defensive tree carries no point system at all: those
-         exchanges need to feel like the player is barely surviving, and a weighted
-         distribution would undercut that pressure.</p>
-
-      <p>Where the system has the most impact is on ranged attacks and gap-closers.
-         As the distribution shifts, the fight's rhythm changes — trading close-quarters
-         pressure for a cat-and-mouse dynamic of weaving through ranged attacks to find
-         an opening on an unguarded enemy. The same boss, a different fight.</p>
-
-      <p style="color:var(--muted); font-family:var(--font-mono); font-size:0.72rem; margin-top:1.6rem; padding-top:1.2rem; border-top:1px solid var(--border);">
-        // System architected in BPC_Attacks_TOG — full implementation
-        scoped for a future build.</p>
-    </div>
-  </div>
 
   <!-- ── AI Doc Modal ─────────────────────────────────────────────── -->
   <div id="modal-ai-doc" class="decision-overlay">
