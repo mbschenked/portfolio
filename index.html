@@ -1213,6 +1213,22 @@
     }
     .eq-legend em { color: var(--text); font-style: italic; }
 
+    /* Diagram primitives — used by inline SVG diagrams (see diagram-svg skill) */
+    .diag-svg { width: 100%; height: auto; display: block; font-family: var(--font-mono); }
+    .diag-svg .box        { fill: rgba(46,184,204,0.04); stroke: rgba(46,184,204,0.4); stroke-width: 1; }
+    .diag-svg .box--key   { fill: rgba(46,184,204,0.10); stroke: rgba(46,184,204,0.5); stroke-width: 1; }
+    .diag-svg .fill-bar   { fill: rgba(46,184,204,0.4); }
+    .diag-svg .arrow      { stroke: #2eb8cc; stroke-width: 1.2; fill: none; }
+    .diag-svg .arrow--dashed { stroke-dasharray: 4,3; }
+    .diag-svg .label      { font-size: 9px; fill: #2eb8cc; letter-spacing: 2px; }
+    .diag-svg .title      { font-size: 11px; fill: #d4d8e8; }
+    .diag-svg .text       { font-size: 11px; fill: #adb1c4; }
+    .diag-svg .text-sm    { font-size: 10px; fill: #adb1c4; }
+    .diag-svg .text-xs    { font-size: 9px;  fill: #535870; }
+    .diag-svg .note       { font-size: 10px; fill: #adb1c4; font-style: italic; }
+    .diag-svg .note-sm    { font-size: 9px;  fill: #adb1c4; font-style: italic; }
+    .diag-svg .divider    { stroke: rgba(255,255,255,0.06); stroke-width: 1; }
+
     /* ── Decision CTA & Modal ───────────────────────────────────── */
     .decision-card { display: flex; flex-direction: column; }
 
@@ -1867,10 +1883,12 @@
 
             <p style="margin:0 0 1.2rem; font-size:0.92rem; color:var(--text); line-height:1.78;">
               Attacks and combos are organized into branches within the combat tree.
-              Every time an attack doesn't fire, it accumulates points — pressure building
-              toward inevitability. Selection chance is its current points divided by the
-              branch total: a live probability distribution that shifts across the entire
-              fight based on what actually works against <em>this</em> player.
+              Every time an attack doesn't get chosen, it gains points within its pool of
+              competing choices. Selection chance is its current points divided by the branch
+              total: a live probability distribution that shifts boss behavior based on player
+              mistakes, resulting in an adaptive fighting experience. After firing, a hardcoded
+              cooldown takes the attack offline — nothing repeats back-to-back, so the player
+              can't pattern-match and combos stay fresh.
             </p>
 
             <div class="eq-block">
@@ -1918,6 +1936,87 @@
               <div><em>w(H<sub>i</sub>)</em> — hit weight; scales points added based on whether the attack would connect</div>
               <div><em>P<sub>i</sub></em> ← 0 — reset on successful hit; enforces cooldown before the attack can re-accumulate</div>
             </div>
+
+            <!-- ░░░ PER-DECISION FLOW DIAGRAM ░░░ -->
+            <div style="background: rgba(46,184,204,0.04); border: 1px solid rgba(46,184,204,0.14); border-radius: var(--radius); padding: 1.4rem 1.6rem; margin-top: 2rem;">
+              <div style="font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cyan); margin-bottom: 1rem;">// Per-Decision Flow</div>
+                <svg viewBox="0 0 1080 580" class="diag-svg" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <marker id="arrV2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8 Z" fill="#2eb8cc"/></marker>
+                  </defs>
+                  <!-- DECISION TICK -->
+                  <rect x="440" y="20" width="160" height="40" rx="6" class="box--key"/>
+                  <text x="520" y="45" text-anchor="middle" class="title">DECISION TICK</text>
+                  <text x="240" y="44" text-anchor="end" class="note">fires when the BT requests an attack</text>
+                  <line x1="520" y1="60" x2="520" y2="84" class="arrow" marker-end="url(#arrV2)"/>
+                  <!-- COOLDOWN FILTER -->
+                  <rect x="400" y="86" width="240" height="36" rx="6" class="box"/>
+                  <text x="520" y="109" text-anchor="middle" class="text">if cooldown active → fail</text>
+                  <text x="240" y="109" text-anchor="end" class="note">filters cooled-down attacks</text>
+                  <line x1="520" y1="122" x2="520" y2="146" class="arrow" marker-end="url(#arrV2)"/>
+                  <!-- ROLL -->
+                  <rect x="400" y="148" width="240" height="58" rx="6" class="box"/>
+                  <text x="520" y="170" text-anchor="middle" class="text">P(i) = P<tspan baseline-shift="sub" font-size="70%">i</tspan> / ΣP<tspan baseline-shift="sub" font-size="70%">j</tspan></text>
+                  <text x="520" y="190" text-anchor="middle" class="text">roll → select attack</text>
+                  <text x="240" y="172" text-anchor="end" class="note">weighted random over current points</text>
+                  <text x="240" y="188" text-anchor="end" class="text-xs">biased but never deterministic</text>
+                  <line x1="520" y1="206" x2="520" y2="230" class="arrow" marker-end="url(#arrV2)"/>
+                  <!-- FIRE -->
+                  <rect x="440" y="232" width="160" height="40" rx="6" class="box--key"/>
+                  <text x="520" y="257" text-anchor="middle" class="title">FIRE</text>
+                  <text x="240" y="248" text-anchor="end" class="note">boss commits — chosen attack's P</text>
+                  <text x="240" y="262" text-anchor="end" class="text-xs">resets regardless of outcome</text>
+                  <line x1="520" y1="272" x2="520" y2="296" class="arrow" marker-end="url(#arrV2)"/>
+                  <!-- OUTCOME -->
+                  <rect x="440" y="298" width="160" height="40" rx="6" class="box--key"/>
+                  <text x="520" y="323" text-anchor="middle" class="title">OUTCOME</text>
+                  <text x="240" y="314" text-anchor="end" class="note">the player's response routes</text>
+                  <text x="240" y="328" text-anchor="end" class="text-xs">the next modifier update</text>
+                  <!-- splitter: OUTCOME → branches (T-junction) -->
+                  <line x1="520" y1="338" x2="520" y2="352" class="arrow"/>
+                  <line x1="340" y1="352" x2="700" y2="352" class="arrow"/>
+                  <line x1="340" y1="352" x2="340" y2="364" class="arrow" marker-end="url(#arrV2)"/>
+                  <line x1="520" y1="352" x2="520" y2="364" class="arrow" marker-end="url(#arrV2)"/>
+                  <line x1="700" y1="352" x2="700" y2="364" class="arrow" marker-end="url(#arrV2)"/>
+                  <!-- HIT -->
+                  <rect x="260" y="364" width="160" height="84" rx="6" class="box"/>
+                  <text x="340" y="384" text-anchor="middle" class="label">HIT</text>
+                  <text x="340" y="406" text-anchor="middle" class="text">m ↑</text>
+                  <text x="340" y="424" text-anchor="middle" class="text">P = 0</text>
+                  <text x="340" y="440" text-anchor="middle" class="text-xs">+ start cooldown task</text>
+                  <!-- MISS -->
+                  <rect x="440" y="364" width="160" height="84" rx="6" class="box"/>
+                  <text x="520" y="384" text-anchor="middle" class="label">MISS / BLOCK</text>
+                  <text x="520" y="406" text-anchor="middle" class="text">m ↓</text>
+                  <text x="520" y="424" text-anchor="middle" class="text">P = 0</text>
+                  <text x="520" y="440" text-anchor="middle" class="text-xs">+ start cooldown task</text>
+                  <!-- PARRY -->
+                  <rect x="620" y="364" width="160" height="84" rx="6" class="box"/>
+                  <text x="700" y="384" text-anchor="middle" class="label">PERFECT PARRY</text>
+                  <text x="700" y="406" text-anchor="middle" class="text">m unchanged</text>
+                  <text x="700" y="424" text-anchor="middle" class="text">P = 0</text>
+                  <text x="700" y="440" text-anchor="middle" class="text-xs">+ start cooldown task</text>
+                  <!-- merger: branches → ACCUMULATE (Y-junction) -->
+                  <line x1="340" y1="448" x2="340" y2="468" class="arrow"/>
+                  <line x1="520" y1="448" x2="520" y2="468" class="arrow"/>
+                  <line x1="700" y1="448" x2="700" y2="468" class="arrow"/>
+                  <line x1="340" y1="468" x2="700" y2="468" class="arrow"/>
+                  <line x1="520" y1="468" x2="520" y2="480" class="arrow" marker-end="url(#arrV2)"/>
+                  <!-- ACCUMULATE -->
+                  <rect x="380" y="482" width="280" height="58" rx="6" class="box"/>
+                  <text x="520" y="502" text-anchor="middle" class="label">FOR EACH ATTACK i IN BRANCH</text>
+                  <text x="520" y="524" text-anchor="middle" class="text">P<tspan baseline-shift="sub" font-size="70%">i</tspan> ← P<tspan baseline-shift="sub" font-size="70%">i</tspan> + 1 · m<tspan baseline-shift="sub" font-size="70%">i</tspan> · w(H<tspan baseline-shift="sub" font-size="70%">i</tspan>)</text>
+                  <text x="240" y="506" text-anchor="end" class="note">attacks accumulate points</text>
+                  <text x="240" y="522" text-anchor="end" class="text-xs">modifier scales gain rate</text>
+                  <!-- loop -->
+                  <path d="M 660 511 L 810 511 L 810 40 L 600 40" fill="none" class="arrow arrow--dashed" marker-end="url(#arrV2)"/>
+                  <text x="824" y="275" text-anchor="middle" class="text-xs" style="letter-spacing:2px;" transform="rotate(-90, 824, 275)">NEXT TICK</text>
+                </svg>
+              <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-top: 1rem; line-height: 1.7;">
+                Per-decision flow with functional annotations. Notes sit on the left of the central column. The cycle ends in point accumulation before the next decision tick.
+              </div>
+            </div>
+            <!-- ░░░ END PER-DECISION FLOW DIAGRAM ░░░ -->
 
             <p style="margin-top:1.4rem; font-size:0.92rem; line-height:1.82;">
               Points only move when an attack result is evaluated — not on a timer.
@@ -2300,7 +2399,7 @@
 
       <div class="dm-tldr">
         <span class="dm-tldr-tag">Goal</span>
-        <span class="dm-tldr-text">Pace is the design variable. Every AI system feeds tension toward the defensive exchange — the climax tactic, where both fighters read each other at the fight's fastest pace.</span>
+        <span class="dm-tldr-text">Pace shapes engagement. Tension peaks in the fiercest exchanges and resets when the player breaks guard or stuns — rhythm by design, not by accident.</span>
       </div>
 
       <div class="dm-section">
