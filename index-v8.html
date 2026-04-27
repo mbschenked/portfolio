@@ -1381,32 +1381,6 @@
     }
     .dm-section p { font-size: 0.92rem; color: var(--text); line-height: 1.82; }
     .dm-section p + p { margin-top: 0.85rem; }
-    .dm-section .dm-lead { color: var(--white); margin-bottom: 0.85rem; }
-    .dm-bullets {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .dm-bullets li {
-      position: relative;
-      padding-left: 1.1rem;
-      font-size: 0.92rem;
-      color: var(--text);
-      line-height: 1.78;
-      margin-bottom: 0.6rem;
-    }
-    .dm-bullets li:last-child { margin-bottom: 0; }
-    .dm-bullets li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0.72em;
-      width: 0.45rem;
-      height: 1px;
-      background: var(--amber);
-    }
-    .dm-section .dm-lead + .dm-bullets { margin-top: 0.2rem; }
-    .dm-bullets + .dm-figure { margin-top: 1.1rem; }
     .dm-code { font-family: var(--font-mono); font-size: 0.83em; color: var(--cyan); }
 
     .dm-figure {
@@ -1487,9 +1461,9 @@
       <div class="hero-tag">Combat Systems Designer &nbsp;/&nbsp; UE5 + Unity</div>
       <h1>MAX<em>SCHENK</em></h1>
       <p class="hero-sub">
-        I design and build technical combat systems — boss encounters,
-        player-expressive mechanics, and modular data-driven architectures
-        that feel good because the rules underneath them are right.
+        I design and build technical combat systems in UE5 — boss encounters,
+        player mechanics, and the data-driven architecture underneath both.
+        Two projects below: a solo combat demo and a shipped team game.
       </p>
 
       <div class="hero-stats">
@@ -1526,21 +1500,19 @@
     <div class="about-grid">
       <div class="about-text fade-up">
         <p>
-          I'm a combat systems designer focused on the intersection of mechanical
-          depth and player expression — building systems that reward mastery without
-          punishing newcomers, and boss encounters that stay surprising across
-          repeated runs.
+          I design combat systems and boss encounters — the kind where the player's
+          read of the fight matters more than their muscle memory, and where the
+          architecture underneath stays clean enough to keep iterating on feel.
         </p>
         <p>
-          My background in chemical engineering gives me a systems-thinking lens.
-          I approach combat the same way I'd approach a reaction network: isolate
-          the variables, define the feedback loops, iterate on parameters, and let
-          emergent complexity arise from well-defined rules.
+          My background is in chemical engineering. I approach combat the same way
+          I'd approach a reaction network: isolate the variables, define the feedback
+          loops, tune parameters, watch emergent behavior fall out of the rules.
         </p>
         <p>
-          I work primarily in Unreal Engine 5, using modular, data-driven architectures
-          that keep tuning fast and scope scalable. When a system needs it, I go to
-          code — Blueprint, C#, and C++ in UE.
+          I work primarily in Unreal Engine 5 with modular, data-driven architectures
+          so tuning stays fast as scope grows. When a system needs it, I drop into
+          Blueprint, C#, or C++.
         </p>
         <div class="skills-grid">
           <span class="skill-chip">Unreal Engine 5</span>
@@ -1590,10 +1562,11 @@
         <div class="project-title">Threads<br/>of God</div>
         <div class="project-subtitle">// Combat Demo &nbsp;·&nbsp; Unreal Engine 5</div>
         <p style="color:var(--muted);font-size:0.93rem;max-width:480px;margin-top:0.9rem;line-height:1.75;">
-          A solo-built third-person combat demo in UE5. Every boss attack is a layered
-          puzzle — forcing position, timing, and mechanic choice simultaneously to
-          create an opening the player has to earn. Built from scratch: player combat,
-          enemy AI, locomotion, and the architecture underneath all of it.
+          A solo-built third-person combat demo in UE5. Every boss attack imposes
+          three constraints at once — position, timing, and mechanic choice — so
+          the opening only appears when the player reads all three. Player combat,
+          enemy AI, locomotion, and the architecture underneath are all built from
+          scratch.
         </p>
         <div class="meta-pills">
           <span class="meta-pill">Unreal Engine 5</span>
@@ -1650,11 +1623,10 @@
     <div class="value-box fade-up">
       <div class="value-box-label">// What This Demonstrates</div>
       <p>
-        A complete combat system designed and built solo — player side, enemy AI, and
-        the architecture underneath both. The boss runs 100+ discrete named attacks
+        A complete combat system designed and built solo — player side, enemy AI,
+        and the architecture underneath both. The boss runs 100+ named attacks
         across phase-gated behavior trees with velocity-aware selection, a separate
-        reactive defensive tree, and a bespoke decorator and task library. This is
-        the depth I build independently when given full ownership.
+        reactive defensive tree, and a custom AI Blueprint Library.
       </p>
     </div>
 
@@ -1666,22 +1638,22 @@
       <div class="toc-item" onclick="togOpen('01')">
         <div class="toc-num">// 01</div>
         <div class="toc-name">Design Pillars</div>
-        <p>The three design pillars every other system in TOG answers to.</p>
+        <p>The three pillars driving every system in the demo.</p>
       </div>
       <div class="toc-item" onclick="togOpen('02')">
         <div class="toc-num">// 02</div>
         <div class="toc-name">Core Systems</div>
-        <p>Combo, deflection, stat &amp; state, and locomotion — the foundations underneath every encounter.</p>
+        <p>Combo, deflection, stat &amp; state, and locomotion — the systems running under every encounter.</p>
       </div>
       <div class="toc-item" onclick="togOpen('03')">
         <div class="toc-num">// 03</div>
         <div class="toc-name">Boss AI — Arelius</div>
-        <p>Behavior tree hierarchy, phase-gated combat, and the full custom decorator + task library.</p>
+        <p>Behavior tree hierarchy, phase-gated combat, and the custom decorator and task library.</p>
       </div>
       <div class="toc-item" onclick="togOpen('04')">
         <div class="toc-num">// 04</div>
         <div class="toc-name">Dynamic AI Runtime</div>
-        <p>Probability system that shifts the boss's attack distribution in response to player results.</p>
+        <p>Point-based probability system that shifts the boss's attack distribution as the player fights.</p>
       </div>
     </div>
 
@@ -1711,7 +1683,7 @@
               <div class="decision-card">
                 <div class="dec-num">Pillar 02</div>
                 <div class="dec-name">Pacing &amp; Escalating Tension</div>
-                <p class="decision-brief">Most boss fights escalate by getting louder — same attacks, faster. TOG regulates pace through pressure-response: sustained player aggression triggers Arelius's defensive tree, which catches a swing with a perfect parry and stuns the player mid-combo. Peak intensity is the moment the system forces a pause.</p>
+                <p class="decision-brief">TOG regulates pace through three attack types working in combination: space-closing attacks, space-creating attacks that create breathing room, and mid-range fast-paced sequences that lock the player into combat. A spatial attack then resets the pace.</p>
                 <button class="dec-cta" onclick="openDecisionModal('modal-d04')">Design Analysis <span class="dec-cta-arrow">→</span></button>
               </div>
               <div class="decision-card">
@@ -1743,21 +1715,22 @@
               <div class="system-card">
                 <span class="sys-icon">⚡</span>
                 <h4>Combo System</h4>
-                <p>Chained light and heavy attack sequences with movement-adaptive inputs and
-                   weapon-specific behaviour trees. Designed for expressive chaining without
-                   sacrificing readability.</p>
+                <p>Light and heavy attack chains with movement-adaptive inputs and
+                   weapon-specific behavior trees. Each combo branches into different
+                   endings, so the same opener can lead to different openings.</p>
               </div>
               <div class="system-card">
                 <span class="sys-icon">🛡</span>
                 <h4>Deflection System</h4>
-                <p>Frame-precise deflection windows trigger QTE-driven counter sequences and
-                   finisher states. Rewards skilled play with spectacular visual payoff.</p>
+                <p>Frame-precise deflection windows trigger counter sequences and
+                   finisher QTEs. Late deflects block; on-frame deflects open the
+                   counter branch.</p>
               </div>
               <div class="system-card">
                 <span class="sys-icon">🔄</span>
                 <h4>Stat &amp; State System</h4>
                 <p>Data-driven attribute tables govern hit reactions, stagger thresholds, and
-                   stamina gating — all exposed via data assets for tuning without recompiling.</p>
+                   stamina gating — all exposed as data assets, so tuning never needs a recompile.</p>
               </div>
               <div class="system-card">
                 <span class="sys-icon">🏃</span>
@@ -1908,13 +1881,12 @@
           <div class="panel-content">
 
             <p style="margin:0 0 1.2rem; font-size:0.92rem; color:var(--text); line-height:1.78;">
-              Attacks and combos are organized into branches within the combat tree.
-              Every time an attack doesn't get chosen, it gains points within its pool of
-              competing choices. Selection chance is its current points divided by the branch
-              total: a live probability distribution that shifts boss behavior based on player
-              mistakes, resulting in an adaptive fighting experience. After firing, a hardcoded
-              cooldown takes the attack offline — nothing repeats back-to-back, so the player
-              can't pattern-match and combos stay fresh.
+              Attacks and combos are organized into branches in the combat tree.
+              Every time an attack isn't chosen, it gains points inside its branch.
+              Selection chance is its current points divided by the branch total — a
+              live distribution that shifts as the player blocks, dodges, and trades.
+              After firing, a separate cooldown task locks the attack out of the pool
+              for a window, so nothing repeats back-to-back.
             </p>
 
             <div class="eq-block">
@@ -2039,32 +2011,32 @@
                   <text x="824" y="275" text-anchor="middle" class="text-xs" style="letter-spacing:2px;" transform="rotate(-90, 824, 275)">NEXT TICK</text>
                 </svg>
               <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-top: 1rem; line-height: 1.7;">
-                Per-decision flow with functional annotations. Notes sit on the left of the central column. The cycle ends in point accumulation before the next decision tick.
+                Per-decision flow with functional annotations.
               </div>
             </div>
             <!-- ░░░ END PER-DECISION FLOW DIAGRAM ░░░ -->
 
             <p style="margin-top:1.4rem; font-size:0.92rem; line-height:1.82;">
-              Points only move when an attack result is evaluated — not on a timer.
-              A perfect parry leaves the modifier untouched: the player executed at the
-              highest level, and the system doesn't penalize the boss for it. Blocks and
-              misses pull the modifier down, so attacks that aren't connecting accumulate
-              slower and naturally fall back in the distribution.
+              Points only move on an attack result, not on a timer. A perfect parry
+              leaves the modifier untouched — the player executed at the highest
+              level, and the boss isn't penalized for it. Blocks and misses pull the
+              modifier down, so attacks that aren't landing accumulate slower and
+              fall back in the distribution.
             </p>
 
             <p style="margin-top:0.9rem; font-size:0.92rem; line-height:1.82;">
-              The system only runs on the combat tree. Narrative attacks — phase openers
-              and crescendo moments that define the fight's emotional arc — are hard-coded
-              to fire reliably. The defensive tree carries no point system at all: those
-              exchanges need to feel like the player is barely surviving, and a weighted
-              distribution would undercut that pressure.
+              The system only runs on the combat tree. Phase openers and crescendo
+              attacks are hard-coded to fire reliably so the fight's beats stay
+              consistent. The defensive tree has no point system at all: those
+              exchanges need to feel like the player is barely surviving, and a
+              weighted distribution would soften that pressure.
             </p>
 
             <p style="margin-top:0.9rem; font-size:0.92rem; line-height:1.82;">
-              Where the system has the most impact is on ranged attacks and gap-closers.
-              As the distribution shifts, the fight's rhythm changes — trading close-quarters
-              pressure for a cat-and-mouse dynamic of weaving through ranged attacks to find
-              an opening on an unguarded enemy. The same boss, a different fight.
+              The shift shows up most on ranged attacks and gap-closers. As the
+              distribution moves, the fight changes shape — close-quarters pressure
+              gives way to weaving through projectiles, looking for an opening on
+              an unguarded boss.
             </p>
 
             <p style="color:var(--muted); font-family:var(--font-mono); font-size:0.72rem; margin-top:1.6rem; padding-top:1.2rem; border-top:1px solid var(--border);">
@@ -2097,10 +2069,9 @@
         <div class="project-title" style="color:var(--tbh);">The<br/>Broken Hero</div>
         <div class="project-subtitle">// Unity &nbsp;·&nbsp; Gameplay Programmer &nbsp;·&nbsp; itch.io</div>
         <p style="color:var(--muted);font-size:0.93rem;max-width:520px;margin-top:0.9rem;line-height:1.75;">
-          A single-player 3D fixed-camera platformer — a Greek soldier reborn from an
-          ancient fresco, navigating a collapsing temple while switching between the
-          physical 3D world and 2D fresco spaces that transform the player into
-          an illustration.
+          A single-player 3D fixed-camera platformer. A Greek soldier reborn from an
+          ancient fresco climbs through a collapsing temple, ducking into painted
+          murals to swap between the 3D world and a 2D illustrated one.
         </p>
         <div class="meta-pills">
           <span class="meta-pill">Unity</span>
@@ -2154,20 +2125,20 @@
       <!-- Right — description + value box + role -->
       <div>
         <p style="color:var(--text);font-size:0.96rem;line-height:1.8;">
-          Players traverse upward through a collapsing temple, hunted by a mythic
-          Minotaur. Entering fresco artworks shifts gameplay from 3D exploration to
-          side-scrolling 2D platforming — a dual-world mechanic that transforms both
-          the visual language and the rules of movement.
+          Players climb upward through a collapsing temple, hunted by a Minotaur.
+          Entering a fresco swaps the game from 3D exploration into side-scrolling
+          2D platforming — a dual-world mechanic that changes the visual language
+          and the rules of movement at the same beat.
         </p>
 
         <div class="value-box" style="margin-top:1.5rem;border-color:rgba(201,119,58,0.25);border-left-color:var(--tbh);">
           <div class="value-box-label" style="color:var(--tbh);">// What This Demonstrates</div>
           <p>
-            Ability to implement complex systems in a cross-discipline team under a
-            fixed production schedule — six milestones, six people, shipped on time
-            Specifically: building a state-driven camera architecture
-            that non-coders could control, and using camera direction as a pacing tool
-            for cinematic feel without any UI.
+            Shipping under a fixed production schedule with a six-person team —
+            six milestones, six disciplines, on time. Specifically: a state-driven
+            Cinemachine architecture the level designer could trigger from scene
+            events without code changes, and camera direction used as the game's
+            primary pacing tool in place of UI or tutorial text.
           </p>
         </div>
 
@@ -2232,20 +2203,20 @@
         <div class="dec-num" style="color:var(--tbh);">Decision 02</div>
         <div class="dec-name">World-Switch as a Physical Metaphor</div>
         <div class="dec-body">
-          The fresco theme demanded the 3D→2D shift feel like entering a painting, not
-          loading a level. I prioritized visual continuity — flattening depth, adjusting the
-          player controller, shifting the camera plane — so the mechanic reads as the world
-          transforming, not the game changing mode.
+          The fresco theme called for the 3D→2D shift to read as entering a painting,
+          not loading a level. I prioritized visual continuity across the seam —
+          flattening depth, adjusting the player controller, and shifting the camera
+          plane on the same frame as the world's appearance changes.
         </div>
       </div>
       <div class="decision-card dec-tbh">
         <div class="dec-num" style="color:var(--tbh);">Decision 03</div>
         <div class="dec-name">Camera-Led Setpiece Pacing</div>
         <div class="dec-body">
-          In a short game, pacing is everything. I used camera direction — not UI or
-          tutorial text — to guide players through major moments: wide pulls for reveals,
-          tight frames for tension, slow pans for payoff. The approach kept the experience
-          cinematic and author-driven without adding any onscreen clutter.
+          In a short game, pacing has to come from somewhere other than a tutorial.
+          I used camera direction to lead the player through the major moments:
+          wide pulls for reveals, tight frames for tension, slow pans for payoff —
+          the same vocabulary a film cut would use to set rhythm.
         </div>
       </div>
     </div>
@@ -2259,7 +2230,7 @@
     <div class="section-header fade-up">
       <div class="section-eyebrow">Get In Touch</div>
       <h2 class="section-title">Contact</h2>
-      <p class="section-desc">Open to combat design roles, collaborations, and feedback on my work.</p>
+      <p class="section-desc">Open to combat and systems design roles, collaborations, and notes on the work above.</p>
     </div>
     <div class="contact-links fade-up">
       <a href="mailto:mbschenked@gmail.com" class="btn btn-amber">mbschenked@gmail.com</a>
@@ -2289,42 +2260,25 @@
       <div class="dm-eyebrow">Decision 01</div>
       <div class="dm-title">Per-Attack Data Structs<br/>Over Baked Blueprint Logic</div>
 
-      <div class="dm-tldr">
-        <span class="dm-tldr-tag">Goal</span>
-        <span class="dm-tldr-text">All boss attack behavior lives in data. Adding a new enemy means new parameter assets — never new logic.</span>
-      </div>
-
       <div class="dm-section">
         <div class="dm-section-label">Architecture</div>
         <h4>The F_AreliusAttackParameters Struct</h4>
-        <p class="dm-lead">All per-attack behavior collapses into one struct that the attack logic reads at runtime.</p>
-        <ul class="dm-bullets">
-          <li>The old setup baked movement, starting position, velocity, and animation into Blueprint nodes per attack. Tuning meant tracing through nodes; comparing two attacks was impossible.</li>
-          <li><span class="dm-code">F_AreliusAttackParameters</span> bundles AnimMontage, MovementParameters (velocity curve), StartingPosition, PlayRate curve name, DistanceFromAttackTarget, VelocityMultiplier, and DualMontage into a single struct.</li>
-          <li>Attack logic reads the struct and executes; it doesn't decide what to execute.</li>
-        </ul>
+        <p>Early attacks had behavior scattered across Blueprint nodes — movement, starting position, velocity, and animation each set separately per attack. Tuning meant tracing through nodes, and comparing two attacks side-by-side was impossible.</p>
+        <p><span class="dm-code">F_AreliusAttackParameters</span> bundles AnimMontage, MovementParameters (velocity curve), StartingPosition, PlayRate curve name, DistanceFromAttackTarget, VelocityMultiplier, and DualMontage into one struct. The attack logic reads the struct and executes whatever it finds.</p>
       </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Iteration Workflow</div>
         <h4>Tuning at Data-Asset Speed</h4>
-        <p class="dm-lead">Tuning shifts from recompile-and-test to open-edit-save, fast enough to feel-tune by instinct.</p>
-        <ul class="dm-bullets">
-          <li>Every old tuning pass required a recompile. Now any parameter is a single field on a data asset: open, change, save.</li>
-          <li>Minutes per adjustment became seconds, which matters when feel-tuning needs dozens of micro-iterations per attack.</li>
-          <li>Comparing two attacks became trivial: open <span class="dm-code">LungeAttack</span> and <span class="dm-code">DashBackQuickThrustAttack</span> side-by-side and line up VelocityMultiplier, DistanceFromAttackTarget, and PlayRate values directly.</li>
-        </ul>
+        <p>Before: every tuning pass required a recompile. After: any parameter is a single field on a data asset — open, change, save. Minutes per adjustment became seconds, which matters when feel-tuning needs dozens of micro-iterations per attack.</p>
+        <p>Comparing two attacks became trivial. Open <span class="dm-code">LungeAttack</span> and <span class="dm-code">DashBackQuickThrustAttack</span> side-by-side, line up their VelocityMultiplier, DistanceFromAttackTarget, and PlayRate values, and read the difference directly off the asset.</p>
       </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Scalability</div>
         <h4>New Enemies Without New Architecture</h4>
-        <p class="dm-lead">Adding a new enemy means new parameter assets, never new BT logic.</p>
-        <ul class="dm-bullets">
-          <li><span class="dm-code">BTT_Attacks</span> (dispatcher) and <span class="dm-code">BTD_CheckAttackParameters</span> (viability decorator) both read <span class="dm-code">F_AreliusAttackParameters</span>. The AI toolset is agnostic to which attack it's executing.</li>
-          <li>A new enemy needs new parameter assets only: no BT changes, no task or decorator changes.</li>
-          <li>The attack pool itself is data. Attacks can be added, removed, or reordered without touching code; phase transitions swap pools at the tree level.</li>
-        </ul>
+        <p><span class="dm-code">BTT_Attacks</span> (dispatcher) and <span class="dm-code">BTD_CheckAttackParameters</span> (viability decorator) both read <span class="dm-code">F_AreliusAttackParameters</span>. The AI toolset doesn't care which attack it's executing. A new enemy needs new parameter assets — no BT changes, no task or decorator changes.</p>
+        <p>The attack pool itself is data. Attacks can be added, removed, or reordered without touching code. Phase transitions swap pools at the tree level, and each attack carries everything it needs to execute.</p>
       </div>
     </div>
   </div>
@@ -2333,47 +2287,27 @@
   <div id="modal-d02" class="decision-overlay">
     <div class="decision-modal">
       <button class="dm-close" onclick="closeDecisionModal('modal-d02')">&times;</button>
-      <div class="dm-eyebrow">Decision 02</div>
-      <div class="dm-title">Two Parallel Trees:<br/>Reactive and Probabilistic</div>
-
-      <div class="dm-tldr">
-        <span class="dm-tldr-tag">Goal</span>
-        <span class="dm-tldr-text">Reactive and proactive AI got their own trees so neither could starve the other.</span>
-      </div>
+      <div class="dm-title">Reactive<br/>Boss AI</div>
 
       <div class="dm-section">
         <div class="dm-section-label">Reactive Defense</div>
         <h4>BT_Arelius_DefensiveTree</h4>
-        <p class="dm-lead">Reactive counters get their own parallel tree so attack selection can't starve them of execution time.</p>
-        <ul class="dm-bullets">
-          <li>In the original single-tree design, reactive counters competed with attack selection for priority. When a parry opportunity arrived, the tree had to finish its current evaluation first, and often didn't. The reaction felt slow and disconnected.</li>
-          <li><span class="dm-code">BT_Arelius_DefensiveTree</span> runs in parallel, reading the player's AISubAction and AIReactionSubAction keys directly.</li>
-          <li>Parry, block, and direct hit each route to their own counter sequence. The reactive side carries its own execution priority, separate from whatever the boss was trying to do next.</li>
-        </ul>
+        <p>In the original single-tree design, reactive counters competed with attack selection for priority. When a parry opportunity arrived, the tree had to finish its current evaluation first — and often didn't. The reaction felt slow and disconnected.</p>
+        <p><span class="dm-code">BT_Arelius_DefensiveTree</span> runs in parallel, reading the player's action and reaction state directly off the blackboard. Parry, block, and direct hit each route to their own counter sequence. The reactive side has its own execution priority, independent of whatever the boss was about to do next.</p>
       </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Non-Deterministic Selection</div>
-        <h4>Emergent Fights via BTD_FollowUpChance</h4>
-        <p class="dm-lead">Follow-ups fire on tunable probability, so the same exchange resolves differently across runs.</p>
-        <ul class="dm-bullets">
-          <li><span class="dm-code">BTD_FollowUpChance</span> is a probabilistic decorator that passes or fails on a tunable probability.</li>
-          <li>When it fails, the boss doesn't follow up. He repositions, pauses, or resets.</li>
-          <li>Players who memorize a punish window will occasionally be wrong: not because the attack changed, but because the follow-up didn't come this time.</li>
-          <li>The fight stays hard because of attention, not muscle memory.</li>
-        </ul>
+        <h4>Probabilistic Follow-Ups</h4>
+        <p><span class="dm-code">BTD_FollowUpChance</span> is a decorator that passes or fails on a tunable probability. When it fails, the boss doesn't follow up — he repositions, pauses, or resets. The same exchange resolves differently across runs.</p>
+        <p>Players who memorize a punish window will occasionally be wrong, not because the attack changed but because the follow-up didn't come this time.</p>
       </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Phase Gating</div>
-        <h4>BTD_CheckPhase — Clean Pool Routing</h4>
-        <p class="dm-lead">Phase 2 attacks are gated at the tree level, so the player's spatial model breaks the moment the phase flips.</p>
-        <ul class="dm-bullets">
-          <li>Phase 1 has no access to projectile or teleport sub-trees. They simply don't execute when <span class="dm-code">BTD_CheckPhase</span> returns false.</li>
-          <li>The gating is at the tree level, not inside the attacks: routes branch, sub-trees either run or don't.</li>
-          <li>Phase 2 unlocks the new attacks immediately, not gradually. The first time Arelius throws a <span class="dm-code">ThrowSwordTeleport</span>, the player's Phase 1 spatial model breaks.</li>
-          <li>The phase transition's job is to reset assumptions and force re-engagement. A boss fight that gets easier as it goes isn't designed; it's just completed.</li>
-        </ul>
+        <h4>BTD_CheckPhase</h4>
+        <p>Phase 1 has no access to projectile or teleport sub-trees — they simply don't execute while <span class="dm-code">BTD_CheckPhase</span> returns false. The gating sits at the tree level, not inside the attacks: routes branch, sub-trees either run or don't.</p>
+        <p>When Phase 2 unlocks, the new attacks arrive all at once instead of being introduced gradually. The first time Arelius throws a <span class="dm-code">ThrowSwordTeleport</span>, the player's spatial model from Phase 1 breaks and has to be rebuilt. The phase transition's job is to reset assumptions.</p>
       </div>
     </div>
   </div>
@@ -2382,24 +2316,13 @@
   <div id="modal-d03" class="decision-overlay">
     <div class="decision-modal">
       <button class="dm-close" onclick="closeDecisionModal('modal-d03')">&times;</button>
-      <div class="dm-eyebrow">Decision 03</div>
       <div class="dm-title">Each Attack as a<br/>Layered Combat Puzzle</div>
-
-      <div class="dm-tldr">
-        <span class="dm-tldr-tag">Goal</span>
-        <span class="dm-tldr-text">Every attack is a constraint problem with one correct opening — designed to be read, not memorized.</span>
-      </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Attack Design</div>
         <h4>Three Constraints, One Opening</h4>
-        <p class="dm-lead">Every attack is a three-constraint problem with one correct opening.</p>
-        <ul class="dm-bullets">
-          <li>Speed and range gate which player mechanics work; boss movement gates viable positioning; the opening left by a correct read is the reward for understanding both. The constraints aren't arbitrary, they're the attack's argument about where the player should be.</li>
-          <li><span class="dm-code">LungeAttack</span> punishes a straight retreat. The answer is lateral, which also sets up a punish.</li>
-          <li><span class="dm-code">DashWindUpThrust</span> uses a long wind-up as a feint: the boss reads early parry attempts and extends the animation to catch them, training patience over reaction.</li>
-          <li><span class="dm-code">PunchCounterAttack</span> only fires when the player approaches. <span class="dm-code">BTD_PlayerVelocityWithinDesiredValues</span> reads the vector and routes to it, so the player's aggression becomes the trigger. Aggression has to be earned, not assumed.</li>
-        </ul>
+        <p>Every attack imposes three constraints: speed and range gate which player mechanics work; boss movement gates viable positioning; the opening left by a correct read is the reward for understanding both.</p>
+        <p><span class="dm-code">LungeAttack</span> punishes a straight retreat — a lateral dodge avoids it and sets up a punish, pulling the player into the back-and-forth swordplay at the core of the combat. <span class="dm-code">DashWindUpThrust</span> uses a long wind-up as a feint: the boss reads early parry attempts and extends the animation to catch them, training patience over reaction. <span class="dm-code">PunchCounterAttack</span> only fires when the player closes distance — a velocity decorator reads the player's vector and routes to it, so player aggression becomes the trigger that loads the counter.</p>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Default Phase One Attack Sequence.png" alt="BT_Combat_Phase1 Core Attack Chain — selector routing into composite attack sub-trees" onclick="openLightbox(this.src)" />
           <div class="dm-figcaption">BT_Combat_Phase1 — Core Attack Chain selector &amp; composite sub-trees</div>
@@ -2407,16 +2330,10 @@
       </div>
 
       <div class="dm-section">
-        <div class="dm-section-label">Combo Design</div>
+        <div class="dm-section-label">Combo Variance</div>
         <h4>Different Endings, Different Openings</h4>
-        <p class="dm-lead">Each combo ends in a different state and leaves a different opening, so the correct response is context-dependent, not rote.</p>
-        <ul class="dm-bullets">
-          <li><span class="dm-code">3AttackSeq</span> ends in recovery lag that rewards close pressure.</li>
-          <li><span class="dm-code">GapCloserAttack-CirclCombo</span> cuts off retreat and circles. Dodging away tightens the trap; dodging in breaks it.</li>
-          <li><span class="dm-code">HeavyCombo</span> is slow but staggering. The window opens only if the player holds their ground.</li>
-          <li>Mix-ups close the loop. Dodge predictably and Arelius redirects to catch the dodge; dodge the charged attack early and he extends it to punish the read, same mechanic as Sekiro's Owl.</li>
-          <li>Combos aren't sequences to memorize, they're conversations. Read correctly, earn the opening; run muscle memory, get caught.</li>
-        </ul>
+        <p>Each combo ends in a different state and leaves a different opening, so the correct response is context-dependent rather than rote. <span class="dm-code">3AttackSeq</span> ends in recovery lag that rewards close pressure. <span class="dm-code">GapCloserAttack-CirclCombo</span> cuts off retreat and circles — dodging away tightens the trap, dodging in breaks it. <span class="dm-code">HeavyCombo</span> is slow but staggering, and the window only opens if the player holds their ground.</p>
+        <p>Dodge predictably and Arelius redirects to catch the dodge; commit to an early parry on a charged attack and he extends it to punish the read — the same trick Sekiro's Owl uses. The combo a player just survived isn't the combo they'll see next time.</p>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Jump Attack Variation Chain.png" alt="Jump attack variation chain — reactive follow-up sub-attacks swapping based on player action" onclick="openLightbox(this.src)" />
           <div class="dm-figcaption">Jump Attack variation chain — follow-ups re-route by player action</div>
@@ -2426,15 +2343,10 @@
       <div class="dm-section">
         <div class="dm-section-label">Adaptive Setpiece</div>
         <h4>One Attack, Four Fights</h4>
-        <p class="dm-lead">Phase 2's <span class="dm-code">ThrowSwordTeleport</span> branches into four cinematic exchanges, each triggered by how the player defended the opening throw.</p>
-        <ul class="dm-bullets">
-          <li>AAA setpieces are usually single authored branches: Genichiro's mid-fight arrow volley plays the same way every time. This is built the other way around: one opening, four authored outcomes, the player reads one cinematic and the system plays whichever they earned.</li>
-          <li>Hit: the blade embeds, Arelius teleports to the wound, a QTE finisher rips the sword free.</li>
-          <li>Block: the thrown sword spins mid-air, the boss teleports onto its arc, slams down on the descent.</li>
-          <li>Dodge: the blade freezes beside the player as a lingering threat; Arelius teleports to it and opens a full follow-up combo. Block that follow-up's opener and the sword is knocked clean from his hand, then a second teleport reappears him at the disarmed blade, committed to a slam.</li>
-          <li>The seam is in animation, not logic. <span class="dm-code">AN_InitiateTeleportToSword</span> fires from inside each branch's montage, stitching the exchange into one moment with no BT re-evaluation and no idle recovery.</li>
-          <li>This breaks TOG's standard authoring pattern. Every other attack runs through a generalized system (fill out the data struct, arrange the BT, the shared runtime executes). The four branches here needed bespoke event graphs per branch: teleport staging, sword visibility, projectile end-state, per-outcome reentry. The setpiece earned its own code.</li>
-        </ul>
+        <p>Most action-game setpieces are single authored branches — Genichiro's mid-fight arrow volley plays the same way every time. Arelius's Phase 2 <span class="dm-code">ThrowSwordTeleport</span> is built the other way: one opening, four distinct cinematic exchanges, each triggered by how the player defended.</p>
+        <p>Hit — the blade embeds, Arelius teleports to the wound, a QTE finisher rips the sword free. Block — the thrown sword spins mid-air, the boss teleports onto its arc, slams down on the descent. Dodge — the blade freezes beside the player as a lingering threat; Arelius teleports to it and opens a full follow-up combo. Block that follow-up's opener and the sword is knocked clean from his hand — a second teleport reappears him at the disarmed blade, committed to a slam.</p>
+        <p>The seams between branches sit inside the animation, not the behavior tree. <span class="dm-code">AN_InitiateTeleportToSword</span> fires from inside each branch's montage and stitches the exchange into a continuous moment — no BT re-evaluation, no idle recovery between beats.</p>
+        <p>This breaks TOG's standard authoring pattern. Every other attack runs through a generalized system — fill out the data struct, arrange the BT, the shared runtime executes. The four branches here needed bespoke event graphs each: teleport staging, sword visibility, projectile end-state, per-outcome reentry.</p>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Sword Throw Teleport Chain.png" alt="Phase 2 ThrowSwordTeleport sub-tree with BTD_FollowUpChance gate, cooldowns, and QuickFarRangeDash routing" onclick="openLightbox(this.src)" />
           <div class="dm-figcaption">ThrowSwordTeleport chain — FollowUpChance gate &amp; dash routing</div>
@@ -2450,16 +2362,10 @@
       </div>
 
       <div class="dm-section">
-        <div class="dm-section-label">Pacing &amp; Flow State</div>
-        <h4>Designing the Entry and the Exit</h4>
-        <p class="dm-lead">The fight is designed around the moment the player drops out of deliberation and starts reading on instinct.</p>
-        <ul class="dm-bullets">
-          <li>Each montage's startup is a learnable signature: distinct enough to recognize, consistent enough to internalize.</li>
-          <li>Mix-ups and phase transitions break the read deliberately. The question isn't whether the player enters flow, it's how fast they get there and what it feels like to be knocked out.</li>
-          <li>Phase 1 builds the model. Arelius stays grounded, melee-range, learnable.</li>
-          <li>Phase 2 introduces <span class="dm-code">ThrowSwordTeleport</span> and <span class="dm-code">VanishingStep</span>. The spatial model breaks; flow disrupts.</li>
-          <li>The reset: remove what the player was relying on, then give them space to rebuild. The design question isn't "is this fair", it's "how long until they find their footing, and does getting there feel earned?"</li>
-        </ul>
+        <div class="dm-section-label">Flow State</div>
+        <h4>Phase Transitions Reset the Read</h4>
+        <p>Flow happens when the player stops deciding and starts reading — when each montage's startup is recognizable enough to act on without thinking. Every attack startup in the demo is built to be a learnable signature: distinct silhouette on the wind-up, consistent timing once internalized.</p>
+        <p>Phase 1 keeps Arelius grounded and melee-range so the player has the runway to build that read. Phase 2 introduces <span class="dm-code">ThrowSwordTeleport</span> and <span class="dm-code">VanishingStep</span>, and the spatial model the player just internalized breaks. The phase transition isn't a difficulty bump — it's a forced rebuild of the read, with new variables added to a vocabulary the player already trusts.</p>
       </div>
     </div>
   </div>
@@ -2468,35 +2374,21 @@
   <div id="modal-d04" class="decision-overlay">
     <div class="decision-modal">
       <button class="dm-close" onclick="closeDecisionModal('modal-d04')">&times;</button>
-      <div class="dm-eyebrow">Decision 04</div>
       <div class="dm-title">Pacing &amp;<br/>Escalating Tension</div>
-
-      <div class="dm-tldr">
-        <span class="dm-tldr-tag">Goal</span>
-        <span class="dm-tldr-text">How sustained player pressure triggers Arelius's defensive tree, which perfect-parries the player into a stun and forces a pace reset at peak intensity.</span>
-      </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Design Intent</div>
         <h4>The Defensive Tree Regulates Pace</h4>
-        <p class="dm-lead">Sustained player aggression triggers a perfect parry that stuns mid-combo and forces breathing room at peak intensity.</p>
-        <ul class="dm-bullets">
-          <li>The defensive tree fires when the player sustains aggression, the moments when the fight's pace is highest.</li>
-          <li>Arelius absorbs the first few hits, then catches a swing with a perfect parry. The parry stuns the player mid-combo, takes control away for a beat, and forces a half-second of breathing room before the next trade.</li>
-          <li>The fight's climax becomes self-regulating. The player can't push pace past a threshold without triggering the response, and the response physically removes their input for the length of the stun.</li>
-        </ul>
+        <p>The defensive tree fires when the player sustains aggression — the moments when the fight's pace is highest. Arelius blocks the first few hits coming from the front, then catches a swing with a perfect parry. The parry stuns the player mid-combo, takes control away for a beat, and forces a half-second of breathing room before the next trade.</p>
+        <p>This makes the fight's pace and intensity self-regulating, and keeps every encounter fresh.</p>
       </div>
 
       <div class="dm-section">
         <div class="dm-section-label">Counter-Attack Logic</div>
         <h4>How Arelius Counters</h4>
-        <p class="dm-lead">Hit-and-run is the dangerous play; sustained pressure is viable, if the player survives the parry it triggers.</p>
-        <ul class="dm-bullets">
-          <li>Hit Arelius once and back away, and he counter-attacks before the player can reset.</li>
-          <li>Commit to sustained pressure instead, and he absorbs the first few hits, then catches one with a perfect parry that stuns the player mid-combo and opens space for his own counter.</li>
-          <li>Most reactive bosses make hit-and-run the safe play; here it's the dangerous one. Most reactive bosses make sustained pressure reckless; here it's viable, if the player survives the parry it triggers.</li>
-          <li>The puzzle becomes reading which response is loading: a direct counter means the player didn't commit enough; a perfect parry means they over-committed.</li>
-        </ul>
+        <p>Hit Arelius once and back away, and he counter-attacks before the player can reset. Commit to sustained pressure instead, and he blocks the first few hits coming from the front, then catches one with a perfect parry that stuns the player mid-combo and opens space for his own counter.</p>
+        <p>Both the safe-looking play and the aggressive one have a punish loaded behind them. The puzzle is reading which response is about to fire: a direct counter means the player didn't commit enough; a perfect parry means they over-committed.</p>
+        <p>The payoff is a fight that swings between modes. The player builds momentum by chipping stamina and dictating pace, then the boss flips the trade — putting them on the ropes, or pulling from an attack pool that demands a different playstyle entirely. A single encounter runs through several of these cycles, so the player's playstyle has to shift inside the same fight.</p>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Defensive Tree.png" alt="BT_Arelius_DefensiveTree showing the AI Counter Attack branch and the General Reset Logic that runs after defensive actions finish" onclick="openLightbox(this.src)" />
           <div class="dm-figcaption">BT_Arelius_DefensiveTree — Counter Attack branch &amp; Reset Logic</div>
@@ -2506,28 +2398,14 @@
       <div class="dm-section">
         <div class="dm-section-label">Pace Reset</div>
         <h4>Breaking Distance</h4>
-        <p class="dm-lead">Arelius pulls distance during long exchanges so every trade gets a fresh re-read.</p>
-        <ul class="dm-bullets">
-          <li>During a long exchange, Arelius occasionally pulls distance with a backward dash or jump-back, then re-engages from a new angle.</li>
-          <li>This keeps every exchange from feeling the same, and forces the player to re-read the fight when he comes back in.</li>
-          <li>The break-away triggers based on how long the exchange has been running, Arelius's stamina, and how the player is moving. When those line up, the boss creates a half-second of space before the next trade.</li>
-        </ul>
+        <p>During a long exchange, Arelius occasionally breaks away — a backward dash or jump-back — then re-engages from a new angle. The break gives the player breathing room and drops the pace, so the next exchange can start at whatever intensity the fight needs next, not the one carried in from the trade before it.</p>
+        <p>The break-away triggers based on how long the exchange has been running, Arelius's stamina, and how the player is moving. When those line up, the boss creates a half-second of space before the next trade.</p>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Defensive Break Away Tree.png" alt="BT_Arelius_DefensiveTree break-away sub-tree handling backward dashes, jump-backs, and re-engage angles" onclick="openLightbox(this.src)" />
           <div class="dm-figcaption">Break-Away sub-tree — distance creation &amp; re-engage routing</div>
         </div>
       </div>
 
-      <div class="dm-section">
-        <div class="dm-section-label">Tree Transitions</div>
-        <h4>Switching to Defense Mid-Attack</h4>
-        <p class="dm-lead">A parry, clean hit, or interrupt flips Arelius into defensive mode mid-attack, with no animation or cooldown lockout.</p>
-        <ul class="dm-bullets">
-          <li>Offensive and defensive behaviors run in parallel, but only one is active at a time.</li>
-          <li>A parry, a clean hit, or an interrupt flips him into defensive mode in the middle of an attack. He doesn't wait for the current move to finish recovering.</li>
-          <li>Nothing waits on a cooldown. Nothing waits for an animation to finish. The player's input is what triggers the switch. That's why the fight never stalls between trades.</li>
-        </ul>
-      </div>
     </div>
   </div>
 
