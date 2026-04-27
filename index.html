@@ -2426,14 +2426,13 @@
       <div class="dm-section">
         <div class="dm-section-label">Adaptive Setpiece</div>
         <h4>One Attack, Four Fights</h4>
-        <p class="dm-lead">Phase 2's <span class="dm-code">ThrowSwordTeleport</span> branches into four cinematic exchanges, each triggered by how the player defended the opening throw.</p>
+        <p class="dm-lead">Phase 2's <span class="dm-code">ThrowSwordTeleport</span> broke from TOG's data-driven authoring pattern: one opening, four cinematic exchanges, each triggered by how the player defended.</p>
         <ul class="dm-bullets">
           <li>AAA setpieces are usually single authored branches: Genichiro's mid-fight arrow volley plays the same way every time. This is built the other way around: one opening, four authored outcomes, the player reads one cinematic and the system plays whichever they earned.</li>
           <li>Hit: the blade embeds, Arelius teleports to the wound, a QTE finisher rips the sword free.</li>
           <li>Block: the thrown sword spins mid-air, the boss teleports onto its arc, slams down on the descent.</li>
           <li>Dodge: the blade freezes beside the player as a lingering threat; Arelius teleports to it and opens a full follow-up combo. Block that follow-up's opener and the sword is knocked clean from his hand, then a second teleport reappears him at the disarmed blade, committed to a slam.</li>
           <li>The seam is in animation, not logic. <span class="dm-code">AN_InitiateTeleportToSword</span> fires from inside each branch's montage, stitching the exchange into one moment with no BT re-evaluation and no idle recovery.</li>
-          <li>This breaks TOG's standard authoring pattern. Every other attack runs through a generalized system (fill out the data struct, arrange the BT, the shared runtime executes). The four branches here needed bespoke event graphs per branch: teleport staging, sword visibility, projectile end-state, per-outcome reentry. The setpiece earned its own code.</li>
         </ul>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Sword Throw Teleport Chain.png" alt="Phase 2 ThrowSwordTeleport sub-tree with BTD_FollowUpChance gate, cooldowns, and QuickFarRangeDash routing" onclick="openLightbox(this.src)" />
@@ -2449,18 +2448,6 @@
         </div>
       </div>
 
-      <div class="dm-section">
-        <div class="dm-section-label">Pacing &amp; Flow State</div>
-        <h4>Designing the Entry and the Exit</h4>
-        <p class="dm-lead">The fight is designed around the moment the player drops out of deliberation and starts reading on instinct.</p>
-        <ul class="dm-bullets">
-          <li>Each montage's startup is a learnable signature: distinct enough to recognize, consistent enough to internalize.</li>
-          <li>Mix-ups and phase transitions break the read deliberately. The question isn't whether the player enters flow, it's how fast they get there and what it feels like to be knocked out.</li>
-          <li>Phase 1 builds the model. Arelius stays grounded, melee-range, learnable.</li>
-          <li>Phase 2 introduces <span class="dm-code">ThrowSwordTeleport</span> and <span class="dm-code">VanishingStep</span>. The spatial model breaks; flow disrupts.</li>
-          <li>The reset: remove what the player was relying on, then give them space to rebuild. The design question isn't "is this fair", it's "how long until they find their footing, and does getting there feel earned?"</li>
-        </ul>
-      </div>
     </div>
   </div>
 
