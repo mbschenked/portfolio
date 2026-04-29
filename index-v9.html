@@ -687,6 +687,26 @@
     .tbh-role-block li { font-size: 0.9rem; color: var(--text); display: flex; gap: 0.7rem; line-height: 1.5; }
     .tbh-role-block li::before { content: "▸"; color: var(--tbh); flex-shrink: 0; font-size: 0.7rem; margin-top: 0.25rem; }
 
+    .tog-role-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.7rem;
+    }
+
+    .tog-role-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.9rem;
+    }
+
+    .tog-role-block ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .tog-role-block li { font-size: 0.9rem; color: var(--text); line-height: 1.5; position: relative; padding-left: 1.4rem; overflow-wrap: anywhere; }
+    .tog-role-block li::before { content: "▸"; color: var(--amber); font-size: 0.7rem; position: absolute; left: 0; top: 0.35rem; }
+
     .tbh-meta-strip {
       display: flex;
       gap: 1.5rem;
@@ -914,7 +934,7 @@
     /* TOC strip above the stack */
     .stack-toc {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 0;
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -953,7 +973,7 @@
       line-height: 1.6;
     }
     @media (max-width: 880px) {
-      .stack-toc { grid-template-columns: 1fr 1fr; }
+      .stack-toc { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 540px) {
       .stack-toc { grid-template-columns: 1fr; }
@@ -1653,8 +1673,7 @@
         A complete combat system designed and built solo — player side, enemy AI, and
         the architecture underneath both. The boss runs 100+ discrete named attacks
         across phase-gated behavior trees with velocity-aware selection, a separate
-        reactive defensive tree, and a bespoke decorator and task library. This is
-        the depth I build independently when given full ownership.
+        reactive defensive tree, and a bespoke decorator and task library.
       </p>
     </div>
 
@@ -1663,6 +1682,11 @@
     <div class="stack-hint fade-up">a quick map of what's inside — click a panel to dive in <span>↓</span></div>
 
     <div class="stack-toc fade-up">
+      <div class="toc-item" onclick="togOpen('00')">
+        <div class="toc-num">// 00</div>
+        <div class="toc-name">Overview</div>
+        <p>Quick scan of what's inside — accomplishments and the systems running underneath.</p>
+      </div>
       <div class="toc-item" onclick="togOpen('01')">
         <div class="toc-num">// 01</div>
         <div class="toc-name">Design Pillars</div>
@@ -1687,8 +1711,36 @@
 
     <div class="tog-stack fade-up" id="tog-stack">
 
-      <!-- Panel 01 — Design Pillars (default open) -->
-      <div class="tog-panel is-active" data-panel="01">
+      <!-- Panel 00 — Overview (default open) -->
+      <div class="tog-panel is-active" data-panel="00">
+        <div class="panel-spine" onclick="togExpand(this)">
+          <div class="spine-num">00</div>
+          <div class="spine-label">Overview</div>
+          <div class="spine-glyph">+</div>
+        </div>
+        <div class="panel-body">
+          <div class="panel-head">
+            <div class="panel-eyebrow">// 00 — At a Glance</div>
+            <div class="panel-title">Overview</div>
+          </div>
+          <div class="panel-content">
+            <div class="tog-role-block">
+              <div class="tog-role-label">Built Solo in UE5</div>
+              <ul>
+                <li>Authored four modular core systems: Combo (buffered-input), Deflection, Stat &amp; State, Locomotion. All data-driven and tunable without recompile.</li>
+                <li>Designed 100+ discrete named attacks across phase-gated behavior trees, with velocity-aware selection routing the boss's choices in real time.</li>
+                <li>Refined boss mechanics and attack patterns to align with player abilities, increasing player engagement.</li>
+                <li>Wrote a custom blueprint library of 70+ functions spanning 9-directional movement, physics, and runtime spline generation, so the boss's attacks and positioning feel like they're responding to the player.</li>
+                <li>Designed a modular, weighted, behavior tree mimicking memory for the enemy AI, ensuring non-repetitive, intuitive enemy behavior amongst 70+ possible actions.</li>
+                <li>Conducted over 20+ playtests, pinpointed and addressed player annoyances based on feedback data, increasing player retention by 40%.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 01 — Design Pillars -->
+      <div class="tog-panel" data-panel="01">
         <div class="panel-spine" onclick="togExpand(this)">
           <div class="spine-num">01</div>
           <div class="spine-label">Design Pillars</div>
@@ -1698,20 +1750,19 @@
           <div class="panel-head">
             <div class="panel-eyebrow">// 01 — Design Philosophy</div>
             <div class="panel-title">Design Pillars</div>
-            <p class="panel-tagline">Inside: the three design pillars — Combat Puzzle, Pacing &amp; Escalating Tension, and Reactive Boss AI — each linked to a full design analysis modal.</p>
           </div>
           <div class="panel-content">
             <div class="decisions-grid">
               <div class="decision-card">
                 <div class="dec-num">Pillar 01</div>
                 <div class="dec-name">Each Attack as a Layered Combat Puzzle</div>
-                <p class="decision-brief">Attacks that don’t alter how the player acts quickly lose meaning as challenges. In TOG, each attack introduces a distinct constraint—on positioning, timing, or mechanics—and, when read correctly, creates a clear opening as its payoff.</p>
+                <p class="decision-brief">Attacks that don’t alter how the player acts quickly lose meaning as challenges. In TOG, each attack introduces a distinct constraint—on positioning, timing, or blocking—and, when read correctly, creates a clear opening as its payoff.</p>
                 <button class="dec-cta" onclick="openDecisionModal('modal-d03')">Design Analysis <span class="dec-cta-arrow">→</span></button>
               </div>
               <div class="decision-card">
                 <div class="dec-num">Pillar 02</div>
                 <div class="dec-name">Pacing &amp; Escalating Tension</div>
-                <p class="decision-brief">Most boss fights escalate by getting louder — same attacks, faster. TOG regulates pace through pressure-response: sustained player aggression triggers Arelius's defensive tree, which catches a swing with a perfect parry and stuns the player mid-combo. Peak intensity is the moment the system forces a pause.</p>
+                <p class="decision-brief">TOG regulates pace through pressure-response: sustained player aggression triggers Arelius's defensive tree, which catches a swing with a perfect parry and stuns the player mid-combo.</p>
                 <button class="dec-cta" onclick="openDecisionModal('modal-d04')">Design Analysis <span class="dec-cta-arrow">→</span></button>
               </div>
               <div class="decision-card">
@@ -1736,7 +1787,6 @@
           <div class="panel-head">
             <div class="panel-eyebrow">// 02 — Modular Foundations</div>
             <div class="panel-title">Core Systems</div>
-            <p class="panel-tagline">Inside: the four foundational systems running underneath every encounter — Combo, Deflection, Stat &amp; State, and Locomotion. Each is modular, data-driven, and tunable without recompiling.</p>
           </div>
           <div class="panel-content">
             <div class="systems-grid">
@@ -1782,7 +1832,6 @@
           <div class="panel-head">
             <div class="panel-eyebrow">// 03 — Behavior Tree Architecture</div>
             <div class="panel-title">Boss AI — Arelius</div>
-            <p class="panel-tagline">Inside: the boss's behavior tree hierarchy (BT_Arelius and its phase-gated sub-trees), at-a-glance scale stats, and the full custom function library — decorators, tasks, anim notifies, and notify events. Click any tag for its function reference.</p>
           </div>
           <div class="panel-content">
 
@@ -1825,7 +1874,7 @@
               <div class="bt-row bt-indent-2"><span class="bt-connector">├─</span><span class="bt-node"><span class="bt-key">BT_Combat_Phase1</span> <span class="bt-comment">— melee combos, lunges, counters, gap-closers</span></span></div>
               <div class="bt-row bt-indent-2"><span class="bt-connector">└─</span><span class="bt-node"><span class="bt-key">BT_Combat_Phase2</span> <span class="bt-comment">— adds teleport attacks, projectile slashes, vanish</span></span></div>
               <div style="margin-top:0.9rem;"></div>
-              <div class="bt-row"><span class="bt-connector">▸</span><span class="bt-node"><span class="bt-key">BT_Arelius_DefensiveTree</span> <span class="bt-comment">— reactive, reads player AISubAction &amp; AIReactionSubAction</span></span></div>
+              <div class="bt-row"><span class="bt-connector">▸</span><span class="bt-node"><span class="bt-key">BT_Arelius_DefensiveTree</span> <span class="bt-comment">— runs when player sets pace, fires interjects and pattern-break parries</span></span></div>
             </div>
 
             <div class="ai-tags">
@@ -1903,19 +1952,21 @@
           <div class="panel-head">
             <div class="panel-eyebrow">// 04 — Probability Architecture</div>
             <div class="panel-title">Dynamic AI Runtime Behavior</div>
-            <p class="panel-tagline">Inside: the selection probability formula, point-accumulation rules, hit/miss/block/parry behaviors, full variable legend, and the design intent behind why this only runs on the combat tree — not the defensive one.</p>
           </div>
           <div class="panel-content">
 
             <p style="margin:0 0 1.2rem; font-size:0.92rem; color:var(--text); line-height:1.78;">
-              Attacks and combos are organized into branches within the combat tree.
-              Every time an attack doesn't get chosen, it gains points within its pool of
-              competing choices. Selection chance is its current points divided by the branch
-              total: a live probability distribution that shifts boss behavior based on player
-              mistakes, resulting in an adaptive fighting experience. After firing, a hardcoded
-              cooldown takes the attack offline — nothing repeats back-to-back, so the player
-              can't pattern-match and combos stay fresh.
+              The boss has to read as a live opponent, not a memorizable pattern, so every exchange reshapes which action he picks next.
             </p>
+
+            <div class="tog-role-block" style="margin-bottom:1.6rem;">
+              <ul>
+                <li>Each attack lives in a competing branch; when the boss reaches for one, it rolls a weighted random across the branch's current point distribution.</li>
+                <li>Every attack passed over gains points, so the longer it sits unused, the higher its chance of being picked next.</li>
+                <li>On fire, the chosen attack's points reset to zero and a separate cooldown task locks it out, so the same move never fires twice in a row.</li>
+                <li>A per-attack effectiveness modifier (clamped 0.7&ndash;1.3) climbs on hit, drops on miss/block, holds on perfect parry, so the boss leans into what's working.</li>
+              </ul>
+            </div>
 
             <div class="eq-block">
               <div class="eq-label">// Selection Probability</div>
@@ -2215,41 +2266,6 @@
       </div>
     </div>
 
-    <!-- Design Decisions — full width below -->
-    <div class="decisions-eyebrow dec-tbh fade-up" style="margin-top:3rem;color:var(--tbh);">Design Decisions — The Reasoning Behind the Build</div>
-    <div class="decisions-grid fade-up">
-      <div class="decision-card dec-tbh">
-        <div class="dec-num" style="color:var(--tbh);">Decision 01</div>
-        <div class="dec-name">State-Driven Camera Architecture</div>
-        <div class="dec-body">
-          Early builds used hardcoded camera positions per scene. This broke every time
-          level layout changed between milestones. I built CameraManager with a Cinemachine
-          state machine so the level designer could trigger camera transitions through scene
-          events — no code changes needed. This unblocked non-coders during M2 and M3 crunch.
-        </div>
-      </div>
-      <div class="decision-card dec-tbh">
-        <div class="dec-num" style="color:var(--tbh);">Decision 02</div>
-        <div class="dec-name">World-Switch as a Physical Metaphor</div>
-        <div class="dec-body">
-          The fresco theme demanded the 3D→2D shift feel like entering a painting, not
-          loading a level. I prioritized visual continuity — flattening depth, adjusting the
-          player controller, shifting the camera plane — so the mechanic reads as the world
-          transforming, not the game changing mode.
-        </div>
-      </div>
-      <div class="decision-card dec-tbh">
-        <div class="dec-num" style="color:var(--tbh);">Decision 03</div>
-        <div class="dec-name">Camera-Led Setpiece Pacing</div>
-        <div class="dec-body">
-          In a short game, pacing is everything. I used camera direction — not UI or
-          tutorial text — to guide players through major moments: wide pulls for reveals,
-          tight frames for tension, slow pans for payoff. The approach kept the experience
-          cinematic and author-driven without adding any onscreen clutter.
-        </div>
-      </div>
-    </div>
-
   </section>
 
   <hr class="divider" />
@@ -2334,21 +2350,22 @@
     <div class="decision-modal">
       <button class="dm-close" onclick="closeDecisionModal('modal-d02')">&times;</button>
       <div class="dm-eyebrow">Decision 02</div>
-      <div class="dm-title">Two Parallel Trees:<br/>Reactive and Probabilistic</div>
+      <div class="dm-title">Two Trees,<br/>Two Tempos</div>
 
       <div class="dm-tldr">
         <span class="dm-tldr-tag">Goal</span>
-        <span class="dm-tldr-text">Reactive and proactive AI got their own trees so neither could starve the other.</span>
+        <span class="dm-tldr-text">Two trees swap on tempo. The defensive one runs when the player drives, until a perfect parry hands the pace back.</span>
       </div>
 
       <div class="dm-section">
-        <div class="dm-section-label">Reactive Defense</div>
+        <div class="dm-section-label">Pace Handoff</div>
         <h4>BT_Arelius_DefensiveTree</h4>
-        <p class="dm-lead">Reactive counters get their own parallel tree so attack selection can't starve them of execution time.</p>
+        <p class="dm-lead">When the player takes the pace, the boss runs a different tree. Combat-tree Arelius stops driving the exchange; defensive-tree Arelius hunts gaps in it.</p>
         <ul class="dm-bullets">
-          <li>In the original single-tree design, reactive counters competed with attack selection for priority. When a parry opportunity arrived, the tree had to finish its current evaluation first, and often didn't. The reaction felt slow and disconnected.</li>
-          <li><span class="dm-code">BT_Arelius_DefensiveTree</span> runs in parallel, reading the player's AISubAction and AIReactionSubAction keys directly.</li>
-          <li>Parry, block, and direct hit each route to their own counter sequence. The reactive side carries its own execution priority, separate from whatever the boss was trying to do next.</li>
+          <li>If the player parries clean, outmaneuvers Arelius, and times strikes well, the fight changes hands. <span class="dm-code">BT_Arelius_DefensiveTree</span> takes over and the boss stops setting the pace.</li>
+          <li>In defensive mode, Arelius doesn't pick from the combat pool. He waits for the player's pressure to lighten and interjects the moment it does.</li>
+          <li>Sustained player aggression eventually triggers a perfect parry. The player gets stunned mid-combo, Arelius recovers initiative, and the combat tree resumes.</li>
+          <li>Without the swap the fight calcifies into a one-sided argument. With it, every long player run earns a forced answer.</li>
         </ul>
       </div>
 
@@ -2364,17 +2381,6 @@
         </ul>
       </div>
 
-      <div class="dm-section">
-        <div class="dm-section-label">Phase Gating</div>
-        <h4>BTD_CheckPhase — Clean Pool Routing</h4>
-        <p class="dm-lead">Phase 2 attacks are gated at the tree level, so the player's spatial model breaks the moment the phase flips.</p>
-        <ul class="dm-bullets">
-          <li>Phase 1 has no access to projectile or teleport sub-trees. They simply don't execute when <span class="dm-code">BTD_CheckPhase</span> returns false.</li>
-          <li>The gating is at the tree level, not inside the attacks: routes branch, sub-trees either run or don't.</li>
-          <li>Phase 2 unlocks the new attacks immediately, not gradually. The first time Arelius throws a <span class="dm-code">ThrowSwordTeleport</span>, the player's Phase 1 spatial model breaks.</li>
-          <li>The phase transition's job is to reset assumptions and force re-engagement. A boss fight that gets easier as it goes isn't designed; it's just completed.</li>
-        </ul>
-      </div>
     </div>
   </div>
 
@@ -2426,14 +2432,12 @@
       <div class="dm-section">
         <div class="dm-section-label">Adaptive Setpiece</div>
         <h4>One Attack, Four Fights</h4>
-        <p class="dm-lead">Phase 2's <span class="dm-code">ThrowSwordTeleport</span> branches into four cinematic exchanges, each triggered by how the player defended the opening throw.</p>
+        <p class="dm-lead">Phase 2's <span class="dm-code">ThrowSwordTeleport</span> broke from TOG's data-driven authoring pattern: one opening, four cinematic exchanges, each triggered by how the player defended.</p>
         <ul class="dm-bullets">
-          <li>AAA setpieces are usually single authored branches: Genichiro's mid-fight arrow volley plays the same way every time. This is built the other way around: one opening, four authored outcomes, the player reads one cinematic and the system plays whichever they earned.</li>
           <li>Hit: the blade embeds, Arelius teleports to the wound, a QTE finisher rips the sword free.</li>
           <li>Block: the thrown sword spins mid-air, the boss teleports onto its arc, slams down on the descent.</li>
-          <li>Dodge: the blade freezes beside the player as a lingering threat; Arelius teleports to it and opens a full follow-up combo. Block that follow-up's opener and the sword is knocked clean from his hand, then a second teleport reappears him at the disarmed blade, committed to a slam.</li>
-          <li>The seam is in animation, not logic. <span class="dm-code">AN_InitiateTeleportToSword</span> fires from inside each branch's montage, stitching the exchange into one moment with no BT re-evaluation and no idle recovery.</li>
-          <li>This breaks TOG's standard authoring pattern. Every other attack runs through a generalized system (fill out the data struct, arrange the BT, the shared runtime executes). The four branches here needed bespoke event graphs per branch: teleport staging, sword visibility, projectile end-state, per-outcome reentry. The setpiece earned its own code.</li>
+          <li>Dodge: the blade freezes beside the player as a lingering threat; Arelius teleports to it and opens a full follow-up combo.</li>
+          <li>Block the follow-up: the sword is knocked clean from his hand, a second teleport reappears him at the disarmed blade, committed to a slam.</li>
         </ul>
         <div class="dm-figure">
           <img src="PortfolioPieces/ThreadsOfGod/blueprint code examples/Sword Throw Teleport Chain.png" alt="Phase 2 ThrowSwordTeleport sub-tree with BTD_FollowUpChance gate, cooldowns, and QuickFarRangeDash routing" onclick="openLightbox(this.src)" />
@@ -2449,18 +2453,6 @@
         </div>
       </div>
 
-      <div class="dm-section">
-        <div class="dm-section-label">Pacing &amp; Flow State</div>
-        <h4>Designing the Entry and the Exit</h4>
-        <p class="dm-lead">The fight is designed around the moment the player drops out of deliberation and starts reading on instinct.</p>
-        <ul class="dm-bullets">
-          <li>Each montage's startup is a learnable signature: distinct enough to recognize, consistent enough to internalize.</li>
-          <li>Mix-ups and phase transitions break the read deliberately. The question isn't whether the player enters flow, it's how fast they get there and what it feels like to be knocked out.</li>
-          <li>Phase 1 builds the model. Arelius stays grounded, melee-range, learnable.</li>
-          <li>Phase 2 introduces <span class="dm-code">ThrowSwordTeleport</span> and <span class="dm-code">VanishingStep</span>. The spatial model breaks; flow disrupts.</li>
-          <li>The reset: remove what the player was relying on, then give them space to rebuild. The design question isn't "is this fair", it's "how long until they find their footing, and does getting there feel earned?"</li>
-        </ul>
-      </div>
     </div>
   </div>
 
